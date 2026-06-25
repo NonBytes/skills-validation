@@ -1,6 +1,7 @@
 const { invoke } = window.__TAURI__.core;
 const { open } = window.__TAURI__.dialog;
 const { listen } = window.__TAURI__.event;
+const { openUrl } = window.__TAURI__.shell;
 
 let currentDirectory = null;
 let currentFile = null;
@@ -98,8 +99,13 @@ async function checkForUpdate() {
   try {
     const result = await invoke("check_for_update");
     if (result.has_update) {
-      btn.textContent = `Update: v${result.latest}`;
+      btn.textContent = `v${result.latest} available`;
       btn.style.color = "var(--color-accent)";
+      btn.disabled = false;
+      btn.onclick = () => {
+        const url = result.url || "https://github.com/NonBytes/skills-validation/releases/latest";
+        openUrl(url);
+      };
     } else {
       btn.textContent = "Up to date";
       btn.style.color = "var(--color-pass)";
