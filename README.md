@@ -145,6 +145,35 @@ The output bundles will be generated in:
 
 ---
 
+## Download
+
+Pre-built binaries are available on the [Releases](https://github.com/NonBytes/skills-validation/releases) page:
+
+| Platform | File |
+|---|---|
+| macOS (Apple Silicon) | `Skills.Validation_x.x.x_aarch64.dmg` |
+| macOS (Intel) | `Skills.Validation_x.x.x_x64.dmg` |
+| Linux | `Skills.Validation_x.x.x_amd64.deb` or `.AppImage` |
+| Windows | `Skills.Validation_x.x.x_x64-setup.exe` or `.msi` |
+
+### macOS: "App is damaged" warning
+
+The app is not signed with an Apple Developer certificate, so macOS Gatekeeper will block it. To fix this, run the following command after installing:
+
+```bash
+xattr -cr "/Applications/Skills Validation.app"
+```
+
+Or if you opened the `.dmg` but haven't moved it to Applications yet:
+
+```bash
+xattr -cr ~/Downloads/Skills\ Validation.app
+```
+
+Then open the app normally.
+
+---
+
 ## Running Tests
 
 The Rust backend includes unit tests to verify trigger matching, directory traversal, auto-fixing edit distances, and LLM configuration parsing. Run the test suite using:
