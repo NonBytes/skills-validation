@@ -27,6 +27,7 @@
     "withGlobalTauri": true
   },
   "bundle": {
+    "active": true,
     "targets": ["dmg", "deb", "appimage", "msi", "nsis"],
     "icon": [
       "icons/icon_32.png",
