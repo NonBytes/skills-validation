@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btn-pick-dir").addEventListener("click", pickDirectory);
   document.getElementById("btn-pick-file").addEventListener("click", pickSingleFile);
   document.getElementById("btn-theme").addEventListener("click", toggleTheme);
+  document.getElementById("btn-check-update").addEventListener("click", checkForUpdate);
 
   restoreTheme();
   restoreOrAutoDetectDirectory();

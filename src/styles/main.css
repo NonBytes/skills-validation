@@ -410,6 +410,13 @@ input:not([type="checkbox"]):not([type="radio"]):not(.tag-input), select {
 .issue-item { font-size: 12px; padding: 2px 0; }
 .issue-error { color: var(--color-fail); }
 .issue-warn { color: var(--color-warn); }
+.issue-suggestion {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+  padding-left: 8px;
+  border-left: 2px solid var(--color-border);
+}
 
 /* ── Filters ── */
 .filter-bar { display: flex; gap: 4px; margin-bottom: 12px; }

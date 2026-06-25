@@ -40,6 +40,7 @@ fn main() {
             commands::watch::watch_directory,
             commands::watch::stop_watching,
             commands::read_file::read_skill_file,
+            commands::updater::check_for_update,
             commands::settings::save_setting,
             commands::settings::load_setting,
             get_default_skills_dir,

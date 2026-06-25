@@ -1,6 +1,8 @@
 {
   "name": "skills-validation",
   "version": "0.1.0",
+  "description": "Offline desktop application built with Tauri v2 and Rust to parse, lint, validate, simulate, and dry-run AI agent skill files.",
+  "author": "NonBytes",
   "private": true,
   "scripts": {
     "dev:css": "npx @tailwindcss/cli -i ./src/styles/main.css -o ./src/styles/output.css --watch",

@@ -44,6 +44,8 @@ pub struct Skill {
 pub struct ValidationIssue {
     pub level: String,
     pub message: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub suggestion: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -88,6 +90,7 @@ pub fn validate_skill(skill: &Skill) -> ValidationResult {
         issues.push(ValidationIssue {
             level: "error".into(),
             message: "Missing or empty 'name' field".into(),
+            suggestion: Some("Add name: \"my-skill-name\" to frontmatter".into()),
         });
     }
 
@@ -95,6 +98,7 @@ pub fn validate_skill(skill: &Skill) -> ValidationResult {
         issues.push(ValidationIssue {
             level: "error".into(),
             message: "Missing or empty 'description' field".into(),
+            suggestion: Some("Add description: \"What this skill does\" to frontmatter".into()),
         });
     }
 
@@ -102,6 +106,7 @@ pub fn validate_skill(skill: &Skill) -> ValidationResult {
         issues.push(ValidationIssue {
             level: "error".into(),
             message: "Empty body (no content after frontmatter)".into(),
+            suggestion: Some("Add tactical guidance in markdown after the --- delimiter".into()),
         });
     }
 
@@ -112,6 +117,7 @@ pub fn validate_skill(skill: &Skill) -> ValidationResult {
                 "Priority {} out of range 1-10, will be coerced to 5",
                 skill.frontmatter.priority
             ),
+            suggestion: Some("Set priority to a value between 1 (lowest) and 10 (highest). Use Fix to auto-correct.".into()),
         });
     }
 
@@ -124,18 +130,26 @@ pub fn validate_skill(skill: &Skill) -> ValidationResult {
 
     if !has_triggers {
         let level = if skill.excluded { "warn" } else { "error" };
+        let suggestion = if skill.excluded {
+            "Excluded skills don't need triggers, but adding phases can improve coverage reports."
+        } else {
+            "Add at least one of: technologies, services, ports, paths, signals, or phases so the skill can be matched to scenarios."
+        };
         issues.push(ValidationIssue {
             level: level.into(),
-            message: "No trigger categories populated (need at least one of: technologies, services, ports, paths, signals, phases)".into(),
+            message: "No trigger categories populated".into(),
+            suggestion: Some(suggestion.into()),
         });
     }
 
     for phase in &skill.frontmatter.phases {
         let normalized = phase.to_lowercase().replace('-', "_");
         if !VALID_PHASES.contains(&normalized.as_str()) {
+            let valid_list = VALID_PHASES.join(", ");
             issues.push(ValidationIssue {
                 level: "error".into(),
                 message: format!("Invalid phase: '{phase}'"),
+                suggestion: Some(format!("Use one of: {valid_list}. Use Fix to auto-correct.")),
             });
         }
     }
@@ -144,6 +158,7 @@ pub fn validate_skill(skill: &Skill) -> ValidationResult {
         issues.push(ValidationIssue {
             level: "warn".into(),
             message: "In excluded category (loaded by framework, not operator selection)".into(),
+            suggestion: Some("This is expected for scan_modes/ and coordination/ skills. No action needed.".into()),
         });
     }
 
