@@ -5,4 +5,5 @@ pub mod llm;
 pub mod fix;
 pub mod watch;
 pub mod read_file;
+pub mod updater;
 pub mod settings;

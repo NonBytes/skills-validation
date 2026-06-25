@@ -91,6 +91,30 @@ async function restoreTheme() {
   if (theme) applyTheme(theme);
 }
 
+async function checkForUpdate() {
+  const btn = document.getElementById("btn-check-update");
+  btn.disabled = true;
+  btn.textContent = "Checking...";
+  try {
+    const result = await invoke("check_for_update");
+    if (result.has_update) {
+      btn.textContent = `Update: v${result.latest}`;
+      btn.style.color = "var(--color-accent)";
+    } else {
+      btn.textContent = "Up to date";
+      btn.style.color = "var(--color-pass)";
+      setTimeout(() => {
+        btn.textContent = "Check Update";
+        btn.style.color = "";
+        btn.disabled = false;
+      }, 3000);
+    }
+  } catch (err) {
+    btn.textContent = "Check Update";
+    btn.disabled = false;
+  }
+}
+
 let watchEnabled = false;
 
 async function startWatching(dir) {

@@ -97,7 +97,8 @@ function renderValidation(container, data) {
     const fixable = hasFixableIssues(r);
     const issuesHtml = r.issues.map(i => {
       const fixIcon = isFixable(i) ? ' <span style="color:var(--color-accent);font-size:10px;">auto-fixable</span>' : '';
-      return `<div class="issue-item issue-${i.level}">${escapeHtml(i.message)}${fixIcon}</div>`;
+      const tip = i.suggestion ? `<div class="issue-suggestion">${escapeHtml(i.suggestion)}</div>` : '';
+      return `<div class="issue-item issue-${i.level}">${escapeHtml(i.message)}${fixIcon}${tip}</div>`;
     }).join("");
 
     const fixBtn = fixable

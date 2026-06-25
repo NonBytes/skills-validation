@@ -11,7 +11,7 @@ function initMatcherPage() {
   page.innerHTML = `
     <h1 class="page-title">Trigger Matching Simulator</h1>
     <div class="card">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
         <div class="form-group">
           <label class="form-label">Technologies</label>
           <div id="input-technologies"></div>
