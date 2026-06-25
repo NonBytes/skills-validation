@@ -1,0 +1,12 @@
+{
+  "name": "skills-validation",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev:css": "npx @tailwindcss/cli -i ./src/styles/main.css -o ./src/styles/output.css --watch",
+    "build:css": "npx @tailwindcss/cli -i ./src/styles/main.css -o ./src/styles/output.css --minify"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4"
+  }
+}

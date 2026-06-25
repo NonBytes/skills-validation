@@ -1,0 +1,31 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nicerdicer/tauri-v2-schema/main/tauri.conf.json",
+  "productName": "Skills Validation",
+  "version": "0.1.0",
+  "identifier": "com.skills-validation.app",
+  "build": {
+    "frontendDist": "../src",
+    "beforeDevCommand": "npm run build:css",
+    "beforeBuildCommand": "npm run build:css"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Skills Validation",
+        "width": 1200,
+        "height": 800,
+        "minWidth": 900,
+        "minHeight": 600,
+        "decorations": true,
+        "resizable": true
+      }
+    ],
+    "security": {
+      "csp": null
+    },
+    "withGlobalTauri": true
+  },
+  "plugins": {}
+
+}
