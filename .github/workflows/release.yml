@@ -14,7 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - platform: macos-latest
+          - platform: macos-15
             target: aarch64-apple-darwin
             label: macOS-arm64
           - platform: macos-14
@@ -32,7 +32,7 @@ jobs:
     name: Build (${{ matrix.label }})
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -53,7 +53,7 @@ jobs:
             libjavascriptcoregtk-4.1-dev
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 22
 
@@ -72,14 +72,14 @@ jobs:
 
       - name: Upload artifacts (macOS .dmg)
         if: runner.os == 'macOS'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ matrix.label }}
           path: src-tauri/target/${{ matrix.target }}/release/bundle/dmg/*.dmg
 
       - name: Upload artifacts (Linux .deb + .AppImage)
         if: runner.os == 'Linux'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ matrix.label }}
           path: |
@@ -88,7 +88,7 @@ jobs:
 
       - name: Upload artifacts (Windows .msi + .exe)
         if: runner.os == 'Windows'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ matrix.label }}
           path: |
@@ -101,10 +101,10 @@ jobs:
     name: Create Release
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           path: artifacts
 
