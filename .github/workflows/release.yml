@@ -69,8 +69,6 @@ jobs:
 
       - name: Build Tauri app
         run: cargo tauri build --target ${{ matrix.target }}
-        env:
-          TAURI_SIGNING_PRIVATE_KEY: ''
 
       - name: Upload artifacts (macOS .dmg)
         if: runner.os == 'macOS'
