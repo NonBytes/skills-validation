@@ -92,8 +92,9 @@ To build the standalone production executable for your operating system, follow 
 npm run build:css
 cargo tauri build
 ```
-The output bundles (compiled `.app` and installable `.dmg` file) will be generated in:
-`src-tauri/target/release/bundle/dmg/`
+The output bundles will be generated in:
+- **`.dmg` Installer**: `src-tauri/target/release/bundle/dmg/`
+- **`.app` Application Bundle**: `src-tauri/target/release/bundle/macos/`
 
 ---
 
@@ -120,8 +121,9 @@ sudo apt install -y \
 npm run build:css
 cargo tauri build
 ```
-The output bundles (installable `.deb` package and standalone `.AppImage` executable) will be generated in:
-`src-tauri/target/release/bundle/deb/` and `src-tauri/target/release/bundle/appimage/`
+The output bundles will be generated in:
+- **`.deb` Installer**: `src-tauri/target/release/bundle/deb/`
+- **`.AppImage` Executable**: `src-tauri/target/release/bundle/appimage/`
 
 ---
 
@@ -137,8 +139,9 @@ The output bundles (installable `.deb` package and standalone `.AppImage` execut
 npm run build:css
 cargo tauri build
 ```
-The output bundles (installable `.msi` package and standalone `.exe` executable via NSIS if configured) will be generated in:
-`src-tauri\target\release\bundle\msi\`
+The output bundles will be generated in:
+- **`.msi` Installer**: `src-tauri\target\release\bundle\msi\`
+- **`.exe` Installer (NSIS)**: `src-tauri\target\release\bundle\nsis\` (if configured)
 
 ---
 
