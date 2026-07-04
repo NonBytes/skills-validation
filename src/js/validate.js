@@ -91,7 +91,7 @@ function renderValidation(container, data) {
   }
 
   html += `<table class="results-table">
-    <thead><tr><th>Name</th><th>Status</th><th>Path</th><th>Issues</th><th></th></tr></thead>
+    <thead><tr><th>Name</th><th>Status</th><th>Path</th><th>Issues</th><th>Remediation</th><th></th></tr></thead>
     <tbody id="validate-tbody">`;
 
   results.forEach(r => {
@@ -99,9 +99,11 @@ function renderValidation(container, data) {
     const fixable = hasFixableIssues(r);
     const issuesHtml = r.issues.map(i => {
       const fixIcon = isFixable(i) ? ' <span style="color:var(--color-accent);font-size:10px;">auto-fixable</span>' : '';
-      const tip = i.suggestion ? `<div class="issue-suggestion">${escapeHtml(i.suggestion)}</div>` : '';
-      return `<div class="issue-item issue-${i.level}">${escapeHtml(i.message)}${fixIcon}${tip}</div>`;
+      return `<div class="issue-item issue-${i.level}">${escapeHtml(i.message)}${fixIcon}</div>`;
     }).join("");
+    const remHtml = r.issues.filter(i => i.suggestion).map(i =>
+      `<div class="issue-suggestion">${escapeHtml(i.suggestion)}</div>`
+    ).join("") || '<span style="color:var(--color-text-muted)">—</span>';
 
     const fixBtn = fixable
       ? `<button class="btn btn-sm btn-accent-outline btn-fix-single" data-path="${escapeHtml(r.path)}">Fix</button>`
@@ -112,6 +114,7 @@ function renderValidation(container, data) {
       <td><span class="status-badge status-${r.status}">${r.status}</span></td>
       <td style="font-size:11px;color:var(--color-text-muted);font-family:monospace;">${escapeHtml(shortPath)}</td>
       <td>${issuesHtml || '<span style="color:var(--color-pass)">—</span>'}</td>
+      <td>${remHtml}</td>
       <td>${fixBtn}</td>
     </tr>`;
   });
