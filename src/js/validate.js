@@ -103,7 +103,7 @@ function renderValidation(container, data) {
         ${load_errors.length > 0 ? `· <span style="color:var(--color-fail);">${load_errors.length} ${t('status_error')}</span>` : ''}
       </span>
     </summary>
-    <table class="results-table" style="margin-top:8px;">
+    <table class="results-table validation-table" style="margin-top:8px;">
     <thead><tr><th>${t('col_name')}</th><th>${t('col_status')}</th><th>${t('col_path')}</th><th>${t('col_issues')}</th><th>${t('col_remediation')}</th><th></th></tr></thead>
     <tbody id="validate-tbody">`;
 
@@ -161,7 +161,7 @@ function renderValidation(container, data) {
             ${refFail > 0 ? `· <span style="color:var(--color-fail);">${refFail} ${t('filter_fail').toLowerCase()}</span>` : ''}
           </span>
         </summary>
-        <table class="results-table" style="margin-top:8px;">
+        <table class="results-table validation-table" style="margin-top:8px;">
           <thead><tr><th>${t('col_name')}</th><th>${t('col_status')}</th><th>${t('col_path')}</th><th>${t('col_issues')}</th><th>${t('col_remediation')}</th></tr></thead>
           <tbody id="ref-tbody">
             ${ref_results.map(r => {

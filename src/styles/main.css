@@ -340,6 +340,7 @@ body {
   color: var(--color-text);
   transition: all 0.15s ease;
   line-height: 1.4;
+  white-space: nowrap;
 }
 
 .btn:hover:not(:disabled) { background: var(--color-surface-hover); }
@@ -512,17 +513,32 @@ details:has(.results-table),
   border-bottom: 1px solid color-mix(in srgb, var(--color-border) 60%, transparent);
   background: var(--color-surface);
   vertical-align: top;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
 }
 
 .results-table tr:hover td { background: var(--color-surface-hover); }
 .results-table tbody tr:last-child td { border-bottom: 0; }
+.validation-table td:nth-child(1) { min-width: 150px; }
+.validation-table td:nth-child(2) {
+  min-width: 86px;
+  white-space: nowrap;
+}
+.validation-table td:nth-child(3),
+.validation-table td:nth-child(4),
+.validation-table td:nth-child(5) {
+  overflow-wrap: anywhere;
+}
+.validation-table td:last-child {
+  min-width: 70px;
+  white-space: nowrap;
+}
 
 /* ── Status badges ── */
 .status-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-width: 58px;
   min-height: 24px;
   padding: 2px 9px;
   border-radius: 20px;
@@ -530,6 +546,7 @@ details:has(.results-table),
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.03em;
+  white-space: nowrap;
 }
 .status-pass { background: color-mix(in srgb, var(--color-pass) 12%, transparent); color: var(--color-pass); }
 .status-fail { background: color-mix(in srgb, var(--color-fail) 12%, transparent); color: var(--color-fail); }
