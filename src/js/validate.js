@@ -77,6 +77,8 @@ function renderValidation(container, data) {
       <button class="filter-btn" data-filter="pass">Pass</button>
       <button class="filter-btn" data-filter="fail">Fail</button>
       <button class="filter-btn" data-filter="warn">Warn</button>
+      <input id="validate-search" type="search" placeholder="Search name or path…"
+        style="margin-left:auto;padding:4px 10px;border-radius:6px;border:1px solid var(--color-border);background:var(--color-surface);color:var(--color-text);font-size:13px;width:220px;">
     </div>
   `;
 
@@ -117,16 +119,35 @@ function renderValidation(container, data) {
   html += `</tbody></table>`;
   container.innerHTML = html;
 
+  let activeFilter = "all";
+  let searchQuery = "";
+
+  function applyFilters() {
+    const q = searchQuery.toLowerCase();
+    container.querySelectorAll("#validate-tbody tr").forEach(row => {
+      const matchStatus = activeFilter === "all" || row.dataset.status === activeFilter;
+      const matchSearch = !q || row.dataset.path.toLowerCase().includes(q) ||
+        row.querySelector(".skill-link")?.textContent.toLowerCase().includes(q);
+      row.style.display = matchStatus && matchSearch ? "" : "none";
+    });
+  }
+
   container.querySelectorAll(".filter-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       container.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
-      const filter = btn.dataset.filter;
-      container.querySelectorAll("#validate-tbody tr").forEach(row => {
-        row.style.display = (filter === "all" || row.dataset.status === filter) ? "" : "none";
-      });
+      activeFilter = btn.dataset.filter;
+      applyFilters();
     });
   });
+
+  const searchInput = document.getElementById("validate-search");
+  if (searchInput) {
+    searchInput.addEventListener("input", () => {
+      searchQuery = searchInput.value;
+      applyFilters();
+    });
+  }
 
   container.querySelectorAll(".btn-fix-single").forEach(btn => {
     btn.addEventListener("click", async () => {
