@@ -100,6 +100,14 @@ pub fn validate_skill(skill: &Skill) -> ValidationResult {
             message: "Missing or empty 'description' field".into(),
             suggestion: Some("Add description: \"What this skill does\" to frontmatter".into()),
         });
+    } else if let Some(desc) = &skill.frontmatter.description {
+        if desc.trim().len() < 20 {
+            issues.push(ValidationIssue {
+                level: "warn".into(),
+                message: format!("Description is very short ({} chars) — LLM matching may be poor", desc.trim().len()),
+                suggestion: Some("Expand description to at least 20 characters to improve scenario matching.".into()),
+            });
+        }
     }
 
     if skill.body.trim().is_empty() {
@@ -108,6 +116,15 @@ pub fn validate_skill(skill: &Skill) -> ValidationResult {
             message: "Empty body (no content after frontmatter)".into(),
             suggestion: Some("Add tactical guidance in markdown after the --- delimiter".into()),
         });
+    } else {
+        let word_count = skill.body.split_whitespace().count();
+        if word_count < 50 {
+            issues.push(ValidationIssue {
+                level: "warn".into(),
+                message: format!("Body is very short ({word_count} words) — consider adding more tactical guidance"),
+                suggestion: Some("Aim for at least 50 words of actionable content so the AI has enough context.".into()),
+            });
+        }
     }
 
     if skill.frontmatter.priority < 1 || skill.frontmatter.priority > 10 {
