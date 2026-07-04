@@ -19,6 +19,7 @@ pub struct LlmResponse {
     pub content: String,
     pub model: String,
     pub provider: String,
+    pub matched_skills: Vec<String>,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -82,24 +83,38 @@ pub async fn list_openai_compat_models(base_url: &str, api_key: Option<&str>) ->
 
 pub async fn send_llm_request(
     config: &LlmConfig,
-    skill_name: &str,
-    skill_body: &str,
+    skills: &[(&str, &str)],  // (name, body) pairs
     scenario: &str,
+    matched_skill_names: Vec<String>,
 ) -> Result<LlmResponse, String> {
     let lang_instruction = match config.language.as_str() {
         "th" => "Respond entirely in Thai. Use Thai for explanations but keep tool commands and code in English.",
         _ => "Respond in English.",
     };
-    let system_prompt = format!(
-        "You are an offensive security AI assistant testing skill: {skill_name}.\n\
-         Given the skill guidance and a target scenario, recommend exactly 3 concrete actions \
-         the operator should take. Be specific with tool commands and flags.\n\
-         {lang_instruction}\n\n\
-         ## Skill Guidance\n{skill_body}"
-    );
+
+    let skill_context = if skills.is_empty() {
+        String::new()
+    } else {
+        skills.iter().map(|(name, body)| format!("## Skill: {name}\n{body}")).collect::<Vec<_>>().join("\n\n")
+    };
+
+    let system_prompt = if skill_context.is_empty() {
+        format!(
+            "You are an offensive security AI assistant. Given a target scenario, recommend \
+             exactly 3 concrete actions the operator should take. Be specific with tool commands and flags.\n\
+             {lang_instruction}"
+        )
+    } else {
+        format!(
+            "You are an offensive security AI assistant. The following skill playbooks have been \
+             automatically matched to the scenario. Use their guidance to recommend exactly 3 concrete \
+             actions the operator should take. Be specific with tool commands and flags.\n\
+             {lang_instruction}\n\n{skill_context}"
+        )
+    };
     let user_prompt = format!("Target scenario:\n{scenario}\n\nRecommend 3 actions:");
 
-    match config.provider.as_str() {
+    let mut response = match config.provider.as_str() {
         "openai" => call_openai_compat(config, &system_prompt, &user_prompt,
             "https://api.openai.com/v1", "gpt-4o-mini", true).await,
         "lmstudio" => call_openai_compat(config, &system_prompt, &user_prompt,
@@ -109,7 +124,9 @@ pub async fn send_llm_request(
         "anthropic" => call_anthropic(config, &system_prompt, &user_prompt).await,
         "ollama" => call_ollama(config, &system_prompt, &user_prompt).await,
         other => Err(format!("Unknown provider: {other}")),
-    }
+    }?;
+    response.matched_skills = matched_skill_names;
+    Ok(response)
 }
 
 async fn call_openai_compat(
@@ -155,6 +172,7 @@ async fn call_openai_compat(
         content,
         model: model.to_string(),
         provider: config.provider.clone(),
+        matched_skills: vec![],
     })
 }
 
@@ -193,6 +211,7 @@ async fn call_anthropic(
         content,
         model: model.to_string(),
         provider: "anthropic".to_string(),
+        matched_skills: vec![],
     })
 }
 
@@ -230,5 +249,6 @@ async fn call_ollama(
         content,
         model: model.to_string(),
         provider: "ollama".to_string(),
+        matched_skills: vec![],
     })
 }

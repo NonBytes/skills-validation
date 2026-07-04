@@ -106,7 +106,7 @@ function renderValidation(container, data) {
       <td><span class="status-badge status-fail">error</span></td>
       <td style="font-size:11px;color:var(--color-text-muted);font-family:monospace;">${escapeHtml(shortPath)}</td>
       <td><div class="issue-item issue-error">${escapeHtml(e.error)}</div></td>
-      <td><div class="issue-suggestion">Quote description values containing ": " — e.g. description: "text: more text"</div></td>
+      <td><div class="issue-suggestion">${t('validate_load_err_yaml_hint')}</div></td>
       <td></td>
     </tr>`;
   });
@@ -116,10 +116,10 @@ function renderValidation(container, data) {
     const fixable = hasFixableIssues(r);
     const issuesHtml = r.issues.map(i => {
       const fixIcon = isFixable(i) ? ` <span style="color:var(--color-accent);font-size:10px;">${t('validate_auto_fixable')}</span>` : '';
-      return `<div class="issue-item issue-${i.level}">${escapeHtml(i.message)}${fixIcon}</div>`;
+      return `<div class="issue-item issue-${i.level}">${escapeHtml(translateIssue(i.message))}${fixIcon}</div>`;
     }).join("");
     const remHtml = r.issues.filter(i => i.suggestion).map(i =>
-      `<div class="issue-suggestion">${escapeHtml(i.suggestion)}</div>`
+      `<div class="issue-suggestion">${escapeHtml(translateSuggestion(i.suggestion))}</div>`
     ).join("") || '<span style="color:var(--color-text-muted)">—</span>';
 
     const fixBtn = fixable
@@ -158,7 +158,7 @@ function renderValidation(container, data) {
             ${ref_results.map(r => {
               const shortPath = r.path.split("/").slice(-4).join("/");
               const issuesHtml = r.issues.map(i =>
-                `<div class="issue-item issue-${r.status === "fail" ? "error" : "warn"}">${escapeHtml(i)}</div>`
+                `<div class="issue-item issue-${r.status === "fail" ? "error" : "warn"}">${escapeHtml(translateRefIssue(i))}</div>`
               ).join("") || '<span style="color:var(--color-pass)">—</span>';
               const remHtml = r.issues.map(i => refRemediation(i, r.path)).filter(Boolean).map(s =>
                 `<div class="issue-suggestion">${escapeHtml(s)}</div>`

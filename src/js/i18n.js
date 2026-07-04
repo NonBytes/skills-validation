@@ -51,6 +51,7 @@ const TRANSLATIONS = {
     validate_no_fix_needed: "No fix needed",
     validate_text_view: "Text",
     validate_rendered_view: "Rendered",
+    validate_load_err_yaml_hint: 'Quote description values containing ": " — e.g. description: "text: more text"',
     // Remediation hints for ref files
     ref_rem_orphan: "Add [link](references/{file}) in the parent SKILL.md",
     ref_rem_short: "Expand content to at least 100 words",
@@ -93,6 +94,7 @@ const TRANSLATIONS = {
     llm_unclear: "Unclear",
     llm_empty_skills: "Load a directory first.",
     llm_load_models: "Loading models...",
+    llm_example_load: "Load example scenario…",
   },
   th: {
     // Sidebar nav
@@ -146,6 +148,7 @@ const TRANSLATIONS = {
     validate_no_fix_needed: "ไม่จำเป็นต้องแก้",
     validate_text_view: "ข้อความ",
     validate_rendered_view: "แสดงผล",
+    validate_load_err_yaml_hint: 'ใส่เครื่องหมายอัญประกาศรอบค่า description ที่มี ": " เช่น description: "ข้อความ: เพิ่มเติม"',
     // Remediation hints for ref files
     ref_rem_orphan: "เพิ่ม [link](references/{file}) ใน SKILL.md ของโฟลเดอร์แม่",
     ref_rem_short: "เพิ่มเนื้อหาให้มากกว่า 100 คำ",
@@ -188,10 +191,59 @@ const TRANSLATIONS = {
     llm_unclear: "ไม่ชัดเจน",
     llm_empty_skills: "โหลดโฟลเดอร์ก่อน",
     llm_load_models: "กำลังโหลดโมเดล...",
+    llm_example_load: "โหลด scenario ตัวอย่าง…",
   },
 };
 
 let _lang = "en";
+
+// Maps Rust-generated English issue/suggestion strings to current language
+const ISSUE_MAP_TH = [
+  [/^Missing or empty 'name'/,         "ไม่มีหรือว่างเปล่า 'name'"],
+  [/^Missing or empty 'description'/,  "ไม่มีหรือว่างเปล่า 'description'"],
+  [/^Description is very short \((\d+) chars\)/, (m) => `คำอธิบายสั้นเกินไป (${m[1]} ตัวอักษร) — LLM matching อาจไม่แม่นยำ`],
+  [/^Empty body/,                       "เนื้อหาว่างเปล่า (ไม่มีข้อความหลัง frontmatter)"],
+  [/^Body is very short \((\d+) words\)/, (m) => `เนื้อหาสั้นเกินไป (${m[1]} คำ) — ควรเพิ่มคำแนะนำมากกว่านี้`],
+  [/^Priority (\d+) out of range/,     (m) => `Priority ${m[1]} ไม่อยู่ในช่วง 1-10 จะถูก coerce เป็น 5`],
+  [/^No trigger categories populated/, "ไม่มี trigger category ใดถูกระบุไว้"],
+  [/^Invalid phase: '(.+)'/,           (m) => `Phase ไม่ถูกต้อง: '${m[1]}'`],
+  [/^In excluded category/,            "อยู่ใน excluded category (โหลดโดย framework อัตโนมัติ)"],
+  [/^Duplicate name '(.+)'/,           (m) => `ชื่อซ้ำกัน '${m[1]}' — framework ใช้ name เป็น unique ID`],
+];
+
+const SUGGESTION_MAP_TH = [
+  [/^Add name:/,                        'เพิ่ม name: "ชื่อ-skill" ใน frontmatter'],
+  [/^Add description:/,                 'เพิ่ม description: "อธิบาย skill นี้" ใน frontmatter'],
+  [/^Expand description to at least/,   "ขยายคำอธิบายให้มีอย่างน้อย 20 ตัวอักษร เพื่อให้ matching แม่นยำขึ้น"],
+  [/^Add tactical guidance/,            "เพิ่มเนื้อหาคำแนะนำใน markdown หลัง delimiter ---"],
+  [/^Aim for at least 50 words/,        "ควรมีเนื้อหาอย่างน้อย 50 คำ เพื่อให้ AI มี context เพียงพอ"],
+  [/^Set priority to a value/,          "ตั้ง priority ระหว่าง 1 (ต่ำสุด) ถึง 10 (สูงสุด) หรือกด Fix เพื่อแก้อัตโนมัติ"],
+  [/^Add at least one of: technologies/, "เพิ่มอย่างน้อยหนึ่งใน: technologies, services, ports, paths, signals, หรือ phases"],
+  [/^Use one of:/,                       "ใช้ค่าที่ถูกต้องสำหรับ phases หรือกด Fix เพื่อแก้อัตโนมัติ"],
+  [/^This is expected for scan_modes/,  "ปกติสำหรับ scan_modes/ และ coordination/ ไม่จำเป็นต้องแก้ไข"],
+  [/^Rename this skill/,                "เปลี่ยนชื่อ skill นี้ให้เป็น slug ที่ไม่ซ้ำกัน"],
+];
+
+function translateRustMsg(str, map) {
+  if (_lang === "en") return str;
+  for (const [pattern, replacement] of map) {
+    const m = str.match(pattern);
+    if (m) return typeof replacement === "function" ? replacement(m) : replacement;
+  }
+  return str;
+}
+
+const REF_ISSUE_MAP_TH = [
+  [/^Orphan:/,                                "ไฟล์กำพร้า: ไม่มีลิงก์จาก SKILL.md ของโฟลเดอร์แม่"],
+  [/^Very short content \((\d+) words\)/,     (m) => `เนื้อหาสั้นเกินไป (${m[1]} คำ)`],
+  [/^No markdown headings/,                   "ไม่มี # หัวข้อ"],
+  [/^Broken link: (.+)/,                      (m) => `ลิงก์เสีย: ${m[1]}`],
+  [/^Empty file/,                             "ไฟล์ว่างเปล่า"],
+];
+
+function translateIssue(msg) { return translateRustMsg(msg, ISSUE_MAP_TH); }
+function translateSuggestion(msg) { return translateRustMsg(msg, SUGGESTION_MAP_TH); }
+function translateRefIssue(msg) { return translateRustMsg(msg, REF_ISSUE_MAP_TH); }
 
 function t(key, vars = {}) {
   const dict = TRANSLATIONS[_lang] || TRANSLATIONS.en;

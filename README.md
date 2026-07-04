@@ -11,8 +11,11 @@ Skills are markdown files with YAML frontmatter used to feed context and playboo
 1. **Frontmatter Lint & Validate**
    - Parse YAML frontmatter of individual files or recursively traverse directory structures.
    - Enforce schema validation (e.g., required fields, valid phases, non-empty bodies).
+   - Validates **reference files** (files without frontmatter) for broken links, orphaned documents, and missing headings.
    - **Auto-Fix** feature that utilizes edit-distance phase correction and priority coercion with a live diff preview.
    - Watch mode that automatically re-validates when files change.
+   - Filter by status (All / Pass / Fail / Warn / Error) with full-text search across name and path.
+   - **Thai / English UI** — all labels, status messages, and validation hints are fully bilingual.
 
 2. **Trigger Matching Simulator**
    - Simulate and debug skill trigger rules (technologies, services, ports, paths, signals, phases).
@@ -23,10 +26,13 @@ Skills are markdown files with YAML frontmatter used to feed context and playboo
    - **Phase Coverage**: Visual progress mapping across the 9 cyber kill-chain phases.
    - **Tool Coverage**: Matches 87 built-in agent tools against skill inventory to find gaps.
    - **OWASP Top 10 Mapping**: Maps skills to vulnerability classes, warning you when gaps (such as A06 or A09) lack playbooks.
+   - Also covers **MITRE ATT&CK Tactics**, **CWE Top 25**, and **PTES Phases**.
 
 4. **LLM Dry-Run Tester**
    - Select cloud or local LLM providers: **OpenAI**, **Anthropic**, **Ollama**, **LM Studio**, and **AnythingLLM**.
-   - Input custom target scenarios and render the model's recommended actions in real-time.
+   - **Automatic skill matching** — describe a target scenario in plain text and the engine auto-selects the most relevant skill playbooks (up to 5) as LLM context, mirroring how the real agent runtime works.
+   - 50 built-in example scenarios covering web, network, cloud, AD, protocols, and OSINT — load any with one click.
+   - Displays which skills were matched for each response.
    - Supports selecting response language (English or Thai) and rating LLM suggestions.
 
 ---

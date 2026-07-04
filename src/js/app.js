@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
       item.classList.add("active");
       document.getElementById(`page-${item.dataset.page}`).classList.add("active");
+      updateTopbarTitle(item.dataset.page);
     });
   });
 
@@ -50,6 +51,16 @@ function switchToPage(page) {
   if (navItem) navItem.classList.add("active");
   const pageEl = document.getElementById(`page-${page}`);
   if (pageEl) pageEl.classList.add("active");
+  updateTopbarTitle(page);
+}
+
+function updateTopbarTitle(page) {
+  const el = document.getElementById("topbar-title");
+  if (!el) return;
+  const keyMap = { validate: "nav_validate", matcher: "nav_matcher", coverage: "nav_coverage", llm: "nav_llm" };
+  const key = keyMap[page] || page;
+  el.setAttribute("data-i18n", key);
+  el.textContent = t(key);
 }
 
 function updateLangButtons() {

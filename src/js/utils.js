@@ -68,22 +68,22 @@ function escapeHtml(str) {
 
 function toggleTheme() {
   const current = document.documentElement.getAttribute("data-theme");
-  const next = current === "light" ? "dark" : "light";
+  const next = current === "dark" ? "light" : "dark";
   applyTheme(next);
   saveSetting("theme", next);
 }
 
 function applyTheme(theme) {
-  if (theme === "light") {
-    document.documentElement.setAttribute("data-theme", "light");
+  if (theme === "dark") {
+    document.documentElement.setAttribute("data-theme", "dark");
   } else {
     document.documentElement.removeAttribute("data-theme");
   }
   const moon = document.getElementById("icon-moon");
   const sun = document.getElementById("icon-sun");
   if (moon && sun) {
-    moon.style.display = theme === "light" ? "none" : "";
-    sun.style.display = theme === "light" ? "" : "none";
+    moon.style.display = theme === "dark" ? "none" : "";
+    sun.style.display = theme === "dark" ? "" : "none";
   }
 }
 
