@@ -50,6 +50,11 @@ body {
   height: 100vh;
 }
 
+:root[lang="th"] body,
+:root[lang="th"] {
+  font-family: 'Noto Sans Thai', system-ui, sans-serif;
+}
+
 /* ── Sidebar ── */
 .sidebar {
   width: 220px;
