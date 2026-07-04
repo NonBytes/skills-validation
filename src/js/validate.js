@@ -83,7 +83,18 @@ function renderValidation(container, data) {
     </div>
   `;
 
-  html += `<table class="results-table">
+  html += `
+  <details open style="margin-top:8px;">
+    <summary style="cursor:pointer;font-size:13px;font-weight:600;color:var(--color-text-muted);padding:6px 0;user-select:none;">
+      Skills (${results.length})
+      <span style="font-weight:400;margin-left:8px;">
+        <span style="color:var(--color-pass);">${pass} pass</span>
+        ${fail > 0 ? `· <span style="color:var(--color-fail);">${fail} fail</span>` : ''}
+        ${warn > 0 ? `· <span style="color:var(--color-warn);">${warn} warn</span>` : ''}
+        ${load_errors.length > 0 ? `· <span style="color:var(--color-fail);">${load_errors.length} error</span>` : ''}
+      </span>
+    </summary>
+    <table class="results-table" style="margin-top:8px;">
     <thead><tr><th>Name</th><th>Status</th><th>Path</th><th>Issues</th><th>Remediation</th><th></th></tr></thead>
     <tbody id="validate-tbody">`;
 
@@ -125,7 +136,7 @@ function renderValidation(container, data) {
     </tr>`;
   });
 
-  html += `</tbody></table>`;
+  html += `</tbody></table></details>`;
 
   if (ref_results.length > 0) {
     const refPass = ref_results.filter(r => r.status === "pass").length;
