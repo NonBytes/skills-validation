@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btn-check-update").addEventListener("click", checkForUpdate);
 
   restoreTheme();
-  restoreOrAutoDetectDirectory();
+  // Don't restore last directory — always start fresh
 
   document.addEventListener("keydown", (e) => {
     const mod = e.metaKey || e.ctrlKey;
