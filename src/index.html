@@ -10,7 +10,8 @@
   <link rel="stylesheet" href="styles/output.css" />
 </head>
 <body>
-  <div style="display:flex; height:100vh;">
+  <div class="desktop-stage">
+  <div class="app-frame">
     <!-- Sidebar -->
     <aside class="sidebar">
       <div class="sidebar-logo">
@@ -20,9 +21,10 @@
             <path d="M9 12l2 2 4-4"/>
           </svg>
         </div>
-        <span>Skills Validator</span>
+        <span>Skill Tester</span>
       </div>
       <nav class="sidebar-nav">
+        <div class="nav-section-label">General</div>
         <button class="nav-item active" data-page="validate">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
           <span data-i18n="nav_validate">Validate</span>
@@ -41,22 +43,26 @@
         </button>
       </nav>
       <div class="sidebar-footer">
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+        <div class="sidebar-footer-label">Workspace</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;">
           <div class="dir-display" id="current-dir" style="flex:1;" data-i18n-default="no_dir">No directory loaded</div>
           <span id="watch-indicator" style="display:none;width:8px;height:8px;border-radius:50%;background:var(--color-pass);flex-shrink:0;" title="Watching for changes"></span>
         </div>
-        <div style="display:flex;gap:6px;">
-          <button class="btn btn-primary" style="flex:1;font-size:12px;" id="btn-pick-dir" data-i18n="btn_open_dir">Open Dir</button>
-          <button class="btn" style="flex:1;font-size:12px;" id="btn-pick-file" data-i18n="btn_open_file">Open File</button>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-primary sidebar-action" style="flex:1;" id="btn-pick-dir" data-i18n="btn_open_dir">Open Dir</button>
+          <button class="btn sidebar-action" style="flex:1;" id="btn-pick-file" data-i18n="btn_open_file">Open File</button>
         </div>
-        <span class="sidebar-version" id="app-version">v0.1.0</span>
+        <span class="sidebar-version" id="app-version">v0.2.0</span>
       </div>
     </aside>
 
     <!-- Main area: topbar + content -->
     <div class="app-main">
       <header class="topbar">
-        <span class="topbar-title" id="topbar-title" data-i18n="nav_validate">Validate</span>
+        <div class="topbar-heading">
+          <span class="topbar-title" id="topbar-title" data-i18n="nav_validate">Validate</span>
+          <span class="topbar-kicker">Offline skill validation lab</span>
+        </div>
         <div class="topbar-controls">
           <button class="btn btn-sm btn-ghost" id="btn-lang-en" style="font-size:11px;padding:3px 8px;">EN</button>
           <span style="font-size:11px;color:var(--color-text-muted);">|</span>
@@ -75,6 +81,7 @@
         <div id="page-llm" class="page"></div>
       </main>
     </div>
+  </div>
   </div>
 
   <script src="js/vendor/marked.min.js"></script>

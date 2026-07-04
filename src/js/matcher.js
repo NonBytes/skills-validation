@@ -12,7 +12,7 @@ function initMatcherPage() {
     <h1 class="page-title">${t('matcher_title')}</h1>
     <p class="page-subtitle">${t('matcher_subtitle')}</p>
     <div class="card">
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+      <div class="form-grid form-grid-3">
         <div class="form-group">
           <label class="form-label">${t('matcher_technologies')}</label>
           <div id="input-technologies"></div>

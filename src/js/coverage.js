@@ -4,7 +4,15 @@ function initCoveragePage() {
     <h1 class="page-title">${t('coverage_title')}</h1>
     <p class="page-subtitle">${t('coverage_subtitle')}</p>
     <div id="coverage-content">
-      <p style="color:var(--color-text-muted)">${t('coverage_empty')}</p>
+      <div class="card empty-state">
+        <div class="empty-state-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+        </div>
+        <div>
+          <div class="empty-state-title">${t('coverage_empty')}</div>
+          <div class="empty-state-copy">${t('coverage_empty_hint')}</div>
+        </div>
+      </div>
     </div>
   `;
 

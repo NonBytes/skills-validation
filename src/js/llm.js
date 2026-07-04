@@ -84,7 +84,7 @@ function initLlmPage() {
     <h1 class="page-title">${t('llm_title')}</h1>
     <p class="page-subtitle">${t('llm_subtitle')}</p>
     <div class="card">
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+      <div class="form-grid form-grid-3">
         <div class="form-group">
           <label class="form-label">${t('llm_provider')}</label>
           <select id="llm-provider" style="width:100%;">
@@ -101,7 +101,9 @@ function initLlmPage() {
             <select id="llm-model" style="flex:1;min-width:0;">
               <option value="">— select provider first —</option>
             </select>
-            <button class="btn btn-ghost" id="btn-refresh-models" title="Refresh models" style="width:38px;height:38px;padding:0;flex-shrink:0;display:flex;align-items:center;justify-content:center;">↻</button>
+            <button class="btn btn-ghost icon-btn" id="btn-refresh-models" title="Refresh models" aria-label="Refresh models" style="flex-shrink:0;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+            </button>
           </div>
         </div>
         <div class="form-group">

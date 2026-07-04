@@ -40,6 +40,7 @@ const TRANSLATIONS = {
     coverage_subtitle: "Visual map of gaps across kill-chain phases, agent tools, OWASP Top 10, MITRE ATT&CK, and CWE Top 25.",
     llm_subtitle: "Send a scenario to a local or cloud LLM with auto-matched skill context, then rate the quality of its response.",
     validate_empty: "Open a skills directory to begin validation.",
+    validate_empty_hint: "Use the workspace controls in the sidebar to load a skill directory or a single skill file.",
     validate_loading: "Validating skills...",
     validate_single_loading: "Validating skill file...",
     validate_total: "Total",
@@ -81,6 +82,7 @@ const TRANSLATIONS = {
     // Coverage page
     coverage_title: "Coverage Matrix",
     coverage_empty: "Open a skills directory first.",
+    coverage_empty_hint: "Coverage needs the full directory so it can compare phases, tools, OWASP, MITRE, CWE, and PTES.",
     coverage_loading: "Computing coverage...",
     // LLM page
     llm_title: "LLM Dry-Run",
@@ -141,6 +143,7 @@ const TRANSLATIONS = {
     coverage_subtitle: "แผนผังช่องว่างของ kill-chain phase, agent tool, OWASP Top 10, MITRE ATT&CK และ CWE Top 25",
     llm_subtitle: "ส่ง scenario ไปยัง LLM พร้อม skill context ที่ match อัตโนมัติ แล้วประเมินคุณภาพของคำตอบที่ได้รับ",
     validate_empty: "เปิดโฟลเดอร์ skill เพื่อเริ่มตรวจสอบ",
+    validate_empty_hint: "ใช้ปุ่มใน Workspace ด้านซ้ายเพื่อโหลดโฟลเดอร์ skill หรือไฟล์ skill เดี่ยว",
     validate_loading: "กำลังตรวจสอบ...",
     validate_single_loading: "กำลังตรวจสอบไฟล์...",
     validate_total: "รวม",
@@ -182,6 +185,7 @@ const TRANSLATIONS = {
     // Coverage page
     coverage_title: "ตาราง Coverage",
     coverage_empty: "เปิดโฟลเดอร์ skill ก่อน",
+    coverage_empty_hint: "Coverage ต้องใช้ทั้งโฟลเดอร์เพื่อเทียบ phase, tools, OWASP, MITRE, CWE และ PTES",
     coverage_loading: "กำลังคำนวณ...",
     // LLM page
     llm_title: "ทดสอบ LLM",

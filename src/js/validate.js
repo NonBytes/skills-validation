@@ -4,7 +4,15 @@ function initValidatePage() {
     <h1 class="page-title">${t('validate_title')}</h1>
     <p class="page-subtitle">${t('validate_subtitle')}</p>
     <div id="validate-content">
-      <p style="color:var(--color-text-muted)">${t('validate_empty')}</p>
+      <div class="card empty-state">
+        <div class="empty-state-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        </div>
+        <div>
+          <div class="empty-state-title">${t('validate_empty')}</div>
+          <div class="empty-state-copy">${t('validate_empty_hint')}</div>
+        </div>
+      </div>
     </div>
   `;
 
