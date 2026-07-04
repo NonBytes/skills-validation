@@ -10,7 +10,7 @@ fn auto_match(skills: &[Skill], scenario: &str) -> Vec<usize> {
     let ports: Vec<u16> = scenario
         .split(|c: char| !c.is_ascii_digit())
         .filter_map(|s| s.parse::<u16>().ok())
-        .filter(|&p| p > 0 && p <= 65535)
+        .filter(|&p| p > 0)
         .collect();
 
     // Use the full scenario text as a single "technology" token —
