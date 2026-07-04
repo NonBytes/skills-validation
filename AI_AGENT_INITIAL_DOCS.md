@@ -466,6 +466,7 @@ After creating the docs, add them to `.gitignore` so they stay local-only:
 
 ```gitignore
 # Agent docs (local only)
+AI_AGENT_INITIAL_DOCS.md
 HANDOFF.md
 CONTEXT.md
 CURRENT_STATE.md
