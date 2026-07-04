@@ -92,10 +92,19 @@ pub async fn send_llm_request(
         _ => "Respond in English.",
     };
 
+    // Cap each skill body at 800 chars to avoid overflowing local model context windows
+    const MAX_BODY_CHARS: usize = 800;
     let skill_context = if skills.is_empty() {
         String::new()
     } else {
-        skills.iter().map(|(name, body)| format!("## Skill: {name}\n{body}")).collect::<Vec<_>>().join("\n\n")
+        skills.iter().map(|(name, body)| {
+            let truncated = if body.len() > MAX_BODY_CHARS {
+                &body[..MAX_BODY_CHARS]
+            } else {
+                body
+            };
+            format!("## Skill: {name}\n{truncated}")
+        }).collect::<Vec<_>>().join("\n\n")
     };
 
     let system_prompt = if skill_context.is_empty() {
@@ -240,10 +249,15 @@ async fn call_ollama(
 
     let body: serde_json::Value = resp.json().await.map_err(|e| format!("Parse error: {e}"))?;
 
+    // Ollama /api/chat → body["message"]["content"]
+    // Some models/versions may use body["response"] (generate endpoint format)
     let content = body["message"]["content"]
         .as_str()
-        .unwrap_or("No response")
-        .to_string();
+        .or_else(|| body["response"].as_str())
+        .map(|s| s.trim())
+        .filter(|s| !s.is_empty())
+        .map(|s| s.to_string())
+        .unwrap_or_else(|| format!("No response (raw: {})", &body.to_string()[..body.to_string().len().min(200)]));
 
     Ok(LlmResponse {
         content,

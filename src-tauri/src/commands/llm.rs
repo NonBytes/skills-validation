@@ -7,7 +7,7 @@ const MAX_MATCHED_SKILLS: usize = 5;
 // Word-boundary check: keyword must not be flanked by alphanumeric chars.
 // Prevents "ad" matching "admin", "uploads", etc.
 fn word_in_text(text: &str, keyword: &str) -> bool {
-    if keyword.len() < 3 {
+    if keyword.len() < 5 {
         return false;
     }
     let text_bytes = text.as_bytes();
