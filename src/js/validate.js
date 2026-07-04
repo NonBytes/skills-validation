@@ -133,18 +133,22 @@ function renderValidation(container, data) {
           </span>
         </summary>
         <table class="results-table" style="margin-top:8px;">
-          <thead><tr><th>Name</th><th>Status</th><th>Path</th><th>Issues</th></tr></thead>
+          <thead><tr><th>Name</th><th>Status</th><th>Path</th><th>Issues</th><th>Remediation</th></tr></thead>
           <tbody>
             ${ref_results.map(r => {
               const shortPath = r.path.split("/").slice(-4).join("/");
               const issuesHtml = r.issues.map(i =>
-                `<div class="issue-item issue-warn">${escapeHtml(i)}</div>`
+                `<div class="issue-item issue-${r.status === "fail" ? "error" : "warn"}">${escapeHtml(i)}</div>`
               ).join("") || '<span style="color:var(--color-pass)">—</span>';
+              const remHtml = r.issues.map(i => refRemediation(i, r.path)).filter(Boolean).map(s =>
+                `<div class="issue-suggestion">${escapeHtml(s)}</div>`
+              ).join("") || '<span style="color:var(--color-text-muted)">—</span>';
               return `<tr>
                 <td><a href="#" class="skill-link ref-link" data-path="${escapeHtml(r.path)}">${escapeHtml(r.name)}</a></td>
                 <td><span class="status-badge status-${r.status}">${r.status}</span></td>
                 <td style="font-size:11px;color:var(--color-text-muted);font-family:monospace;">${escapeHtml(shortPath)}</td>
                 <td>${issuesHtml}</td>
+                <td>${remHtml}</td>
               </tr>`;
             }).join("")}
           </tbody>
@@ -449,6 +453,27 @@ function showMdView(container, content, filePath) {
       openSkillViewer(target);
     });
   });
+}
+
+function refRemediation(issue, filePath) {
+  const filename = filePath.split("/").pop();
+  if (issue.startsWith("Orphan")) {
+    return `Add [link](references/${filename}) in the parent SKILL.md`;
+  }
+  if (issue.startsWith("Very short")) {
+    return "Expand content to at least 100 words";
+  }
+  if (issue.startsWith("No markdown headings")) {
+    return "Add at least one # Heading to structure the document";
+  }
+  if (issue.startsWith("Broken link:")) {
+    const path = issue.replace("Broken link:", "").trim();
+    return `Fix or remove the link to: ${path}`;
+  }
+  if (issue.startsWith("Empty file")) {
+    return "Add content to this reference file or delete it";
+  }
+  return null;
 }
 
 function exportReport() {
