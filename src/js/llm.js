@@ -3,11 +3,11 @@ let llmSkillList = [];
 function initLlmPage() {
   const page = document.getElementById("page-llm");
   page.innerHTML = `
-    <h1 class="page-title">LLM Dry-Run Test</h1>
+    <h1 class="page-title">${t('llm_title')}</h1>
     <div class="card">
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
         <div class="form-group">
-          <label class="form-label">Provider</label>
+          <label class="form-label">${t('llm_provider')}</label>
           <select id="llm-provider" style="width:100%;">
             <option value="ollama">Ollama</option>
             <option value="lmstudio">LM Studio</option>
@@ -17,7 +17,7 @@ function initLlmPage() {
           </select>
         </div>
         <div class="form-group">
-          <label class="form-label">Model</label>
+          <label class="form-label">${t('llm_model')}</label>
           <div style="display:flex;gap:6px;align-items:center;">
             <select id="llm-model" style="flex:1;min-width:0;">
               <option value="">— select provider first —</option>
@@ -26,10 +26,10 @@ function initLlmPage() {
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label">Response Language</label>
+          <label class="form-label">${t('llm_language')}</label>
           <select id="llm-lang" style="width:100%;">
-            <option value="en">English</option>
-            <option value="th">ไทย</option>
+            <option value="en">${t('llm_lang_en')}</option>
+            <option value="th">${t('llm_lang_th')}</option>
           </select>
         </div>
         <div class="form-group" style="grid-column:span 3;">
@@ -37,18 +37,18 @@ function initLlmPage() {
           <input id="llm-apikey" type="password" placeholder="Not needed for local providers" style="width:100%;box-sizing:border-box;" />
         </div>
         <div class="form-group" style="grid-column:span 3;">
-          <label class="form-label">Skill</label>
+          <label class="form-label">${t('llm_skill')}</label>
           <select id="llm-skill" style="width:100%;">
             <option value="">— load skills directory first —</option>
           </select>
         </div>
         <div class="form-group" style="grid-column:span 3;">
-          <label class="form-label">Scenario</label>
+          <label class="form-label">${t('llm_scenario')}</label>
           <textarea id="llm-scenario" placeholder="Describe the target scenario..." style="width:100%;box-sizing:border-box;"></textarea>
         </div>
       </div>
       <div style="margin-top:12px;">
-        <button class="btn btn-primary" id="btn-llm-run">Send to LLM</button>
+        <button class="btn btn-primary" id="btn-llm-run">${t('llm_send')}</button>
       </div>
     </div>
     <div id="llm-results"></div>

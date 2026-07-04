@@ -1,9 +1,9 @@
 function initValidatePage() {
   const page = document.getElementById("page-validate");
   page.innerHTML = `
-    <h1 class="page-title">Frontmatter Lint & Validate</h1>
+    <h1 class="page-title">${t('validate_title')}</h1>
     <div id="validate-content">
-      <p style="color:var(--color-text-muted)">Open a skills directory to begin validation.</p>
+      <p style="color:var(--color-text-muted)">${t('validate_empty')}</p>
     </div>
   `;
 
@@ -18,7 +18,7 @@ function initValidatePage() {
 
 async function runValidation(dir) {
   const container = document.getElementById("validate-content");
-  container.innerHTML = '<div style="display:flex;align-items:center;gap:8px;"><span class="spinner"></span> Validating skills...</div>';
+  container.innerHTML = `<div style="display:flex;align-items:center;gap:8px;"><span class="spinner"></span> ${t('validate_loading')}</div>`;
 
   try {
     const result = await invoke("validate_skills", { directory: dir });
@@ -30,7 +30,7 @@ async function runValidation(dir) {
 
 async function runSingleFileValidation(filePath) {
   const container = document.getElementById("validate-content");
-  container.innerHTML = '<div style="display:flex;align-items:center;gap:8px;"><span class="spinner"></span> Validating skill file...</div>';
+  container.innerHTML = `<div style="display:flex;align-items:center;gap:8px;"><span class="spinner"></span> ${t('validate_single_loading')}</div>`;
 
   try {
     const result = await invoke("validate_single_file", { filePath });
@@ -60,25 +60,25 @@ function renderValidation(container, data) {
 
   let html = `
     <div class="summary-bar">
-      <span class="summary-stat"><span class="dot dot-total"></span> Total: ${total}</span>
-      <span class="summary-stat"><span class="dot dot-pass"></span> Pass: ${pass}</span>
-      <span class="summary-stat"><span class="dot dot-fail"></span> Fail: ${fail}</span>
-      <span class="summary-stat"><span class="dot dot-warn"></span> Warn: ${warn}</span>
+      <span class="summary-stat"><span class="dot dot-total"></span> ${t('validate_total')}: ${total}</span>
+      <span class="summary-stat"><span class="dot dot-pass"></span> ${t('filter_pass')}: ${pass}</span>
+      <span class="summary-stat"><span class="dot dot-fail"></span> ${t('filter_fail')}: ${fail}</span>
+      <span class="summary-stat"><span class="dot dot-warn"></span> ${t('filter_warn')}: ${warn}</span>
       <div style="margin-left:auto;display:flex;gap:6px;">
-        <button class="btn btn-sm btn-ghost" id="btn-export">Export</button>
-        ${fixableCount > 0 ? `<button class="btn btn-sm btn-accent-outline" id="btn-fix-all">Fix All (${fixableCount})</button>` : ''}
+        <button class="btn btn-sm btn-ghost" id="btn-export">${t('btn_export')}</button>
+        ${fixableCount > 0 ? `<button class="btn btn-sm btn-accent-outline" id="btn-fix-all">${t('btn_fix_all')} (${fixableCount})</button>` : ''}
       </div>
     </div>
     <div class="progress-bar">
       <div class="progress-fill" style="width:${passPercent}%;background:linear-gradient(90deg, var(--color-pass) ${passPercent > 0 ? '0%' : ''}, var(--color-pass));"></div>
     </div>
     <div class="filter-bar">
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="pass">Pass</button>
-      <button class="filter-btn" data-filter="fail">Fail</button>
-      <button class="filter-btn" data-filter="warn">Warn</button>
-      ${load_errors.length > 0 ? `<button class="filter-btn" data-filter="error">Error (${load_errors.length})</button>` : ''}
-      <input id="validate-search" type="search" placeholder="Search name or path…"
+      <button class="filter-btn active" data-filter="all">${t('filter_all')}</button>
+      <button class="filter-btn" data-filter="pass">${t('filter_pass')}</button>
+      <button class="filter-btn" data-filter="fail">${t('filter_fail')}</button>
+      <button class="filter-btn" data-filter="warn">${t('filter_warn')}</button>
+      ${load_errors.length > 0 ? `<button class="filter-btn" data-filter="error">${t('status_error')} (${load_errors.length})</button>` : ''}
+      <input id="validate-search" type="search" placeholder="${t('search_placeholder')}"
         style="margin-left:auto;padding:4px 10px;border-radius:6px;border:1px solid var(--color-border);background:var(--color-surface);color:var(--color-text);font-size:13px;width:220px;">
     </div>
   `;
@@ -86,16 +86,16 @@ function renderValidation(container, data) {
   html += `
   <details open style="margin-top:8px;">
     <summary style="cursor:pointer;font-size:13px;font-weight:600;color:var(--color-text-muted);padding:6px 0;user-select:none;">
-      Skills (${results.length})
+      ${t('validate_skills_section')} (${results.length})
       <span style="font-weight:400;margin-left:8px;">
-        <span style="color:var(--color-pass);">${pass} pass</span>
-        ${fail > 0 ? `· <span style="color:var(--color-fail);">${fail} fail</span>` : ''}
-        ${warn > 0 ? `· <span style="color:var(--color-warn);">${warn} warn</span>` : ''}
-        ${load_errors.length > 0 ? `· <span style="color:var(--color-fail);">${load_errors.length} error</span>` : ''}
+        <span style="color:var(--color-pass);">${pass} ${t('filter_pass').toLowerCase()}</span>
+        ${fail > 0 ? `· <span style="color:var(--color-fail);">${fail} ${t('filter_fail').toLowerCase()}</span>` : ''}
+        ${warn > 0 ? `· <span style="color:var(--color-warn);">${warn} ${t('filter_warn').toLowerCase()}</span>` : ''}
+        ${load_errors.length > 0 ? `· <span style="color:var(--color-fail);">${load_errors.length} ${t('status_error')}</span>` : ''}
       </span>
     </summary>
     <table class="results-table" style="margin-top:8px;">
-    <thead><tr><th>Name</th><th>Status</th><th>Path</th><th>Issues</th><th>Remediation</th><th></th></tr></thead>
+    <thead><tr><th>${t('col_name')}</th><th>${t('col_status')}</th><th>${t('col_path')}</th><th>${t('col_issues')}</th><th>${t('col_remediation')}</th><th></th></tr></thead>
     <tbody id="validate-tbody">`;
 
   load_errors.forEach(e => {
@@ -115,7 +115,7 @@ function renderValidation(container, data) {
     const shortPath = r.path.split("/").slice(-3).join("/");
     const fixable = hasFixableIssues(r);
     const issuesHtml = r.issues.map(i => {
-      const fixIcon = isFixable(i) ? ' <span style="color:var(--color-accent);font-size:10px;">auto-fixable</span>' : '';
+      const fixIcon = isFixable(i) ? ` <span style="color:var(--color-accent);font-size:10px;">${t('validate_auto_fixable')}</span>` : '';
       return `<div class="issue-item issue-${i.level}">${escapeHtml(i.message)}${fixIcon}</div>`;
     }).join("");
     const remHtml = r.issues.filter(i => i.suggestion).map(i =>
@@ -123,11 +123,11 @@ function renderValidation(container, data) {
     ).join("") || '<span style="color:var(--color-text-muted)">—</span>';
 
     const fixBtn = fixable
-      ? `<button class="btn btn-sm btn-accent-outline btn-fix-single" data-path="${escapeHtml(r.path)}">Fix</button>`
+      ? `<button class="btn btn-sm btn-accent-outline btn-fix-single" data-path="${escapeHtml(r.path)}">${t('btn_fix')}</button>`
       : '';
 
     html += `<tr data-status="${r.status}" data-path="${escapeHtml(r.path)}">
-      <td><a href="#" class="skill-link" data-path="${escapeHtml(r.path)}">${escapeHtml(r.name)}</a>${r.excluded ? ' <span style="color:var(--color-text-muted);font-size:11px;">(excluded)</span>' : ''}</td>
+      <td><a href="#" class="skill-link" data-path="${escapeHtml(r.path)}">${escapeHtml(r.name)}</a>${r.excluded ? ` <span style="color:var(--color-text-muted);font-size:11px;">${t('validate_excluded')}</span>` : ''}</td>
       <td><span class="status-badge status-${r.status}">${r.status}</span></td>
       <td style="font-size:11px;color:var(--color-text-muted);font-family:monospace;">${escapeHtml(shortPath)}</td>
       <td>${issuesHtml || '<span style="color:var(--color-pass)">—</span>'}</td>
@@ -145,15 +145,15 @@ function renderValidation(container, data) {
     html += `
       <details style="margin-top:16px;">
         <summary style="cursor:pointer;font-size:13px;font-weight:600;color:var(--color-text-muted);padding:6px 0;user-select:none;">
-          Reference Files (${ref_results.length})
+          ${t('validate_refs_section')} (${ref_results.length})
           <span style="font-weight:400;margin-left:8px;">
             <span style="color:var(--color-pass);">${refPass} ok</span>
-            ${refWarn > 0 ? `· <span style="color:var(--color-warn);">${refWarn} warn</span>` : ''}
-            ${refFail > 0 ? `· <span style="color:var(--color-fail);">${refFail} fail</span>` : ''}
+            ${refWarn > 0 ? `· <span style="color:var(--color-warn);">${refWarn} ${t('filter_warn').toLowerCase()}</span>` : ''}
+            ${refFail > 0 ? `· <span style="color:var(--color-fail);">${refFail} ${t('filter_fail').toLowerCase()}</span>` : ''}
           </span>
         </summary>
         <table class="results-table" style="margin-top:8px;">
-          <thead><tr><th>Name</th><th>Status</th><th>Path</th><th>Issues</th><th>Remediation</th></tr></thead>
+          <thead><tr><th>${t('col_name')}</th><th>${t('col_status')}</th><th>${t('col_path')}</th><th>${t('col_issues')}</th><th>${t('col_remediation')}</th></tr></thead>
           <tbody id="ref-tbody">
             ${ref_results.map(r => {
               const shortPath = r.path.split("/").slice(-4).join("/");
@@ -262,14 +262,14 @@ function showPreviewModal(filePath, changes, triggerBtn) {
   overlay.className = "modal-overlay";
   overlay.innerHTML = `
     <div class="modal-content">
-      <div class="modal-header">Preview: ${escapeHtml(fileName)}</div>
+      <div class="modal-header">${t('validate_preview_title')}: ${escapeHtml(fileName)}</div>
       <div class="modal-body">
-        <div style="font-size:12px;color:var(--color-text-muted);margin-bottom:8px;">The following changes will be applied:</div>
+        <div style="font-size:12px;color:var(--color-text-muted);margin-bottom:8px;">${t('validate_preview_hint')}</div>
         ${changesHtml}
       </div>
       <div class="modal-footer">
-        <button class="btn" id="btn-preview-cancel">Cancel</button>
-        <button class="btn btn-sm btn-accent-outline" id="btn-preview-apply">Apply Fix</button>
+        <button class="btn" id="btn-preview-cancel">${t('btn_cancel')}</button>
+        <button class="btn btn-sm btn-accent-outline" id="btn-preview-apply">${t('btn_apply')}</button>
       </div>
     </div>
   `;
@@ -356,13 +356,13 @@ function showPreviewAllModal(previews, container, fixAllBtn) {
   overlay.className = "modal-overlay";
   overlay.innerHTML = `
     <div class="modal-content">
-      <div class="modal-header">Preview: Fix All (${previews.length} files)</div>
+      <div class="modal-header">${t('validate_fix_preview_all')} (${previews.length} files)</div>
       <div class="modal-body" style="max-height:400px;overflow-y:auto;">
         ${itemsHtml}
       </div>
       <div class="modal-footer">
-        <button class="btn" id="btn-preview-cancel">Cancel</button>
-        <button class="btn btn-sm btn-accent-outline" id="btn-preview-apply-all">Apply All</button>
+        <button class="btn" id="btn-preview-cancel">${t('btn_cancel')}</button>
+        <button class="btn btn-sm btn-accent-outline" id="btn-preview-apply-all">${t('btn_apply_all')}</button>
       </div>
     </div>
   `;
@@ -414,10 +414,10 @@ async function openSkillViewer(filePath) {
       <div class="modal-header" style="display:flex;align-items:center;">
         <span style="flex:1;">${escapeHtml(fileName)}</span>
         <div class="viewer-toggle">
-          <button class="filter-btn active" id="btn-view-text">Text</button>
-          <button class="filter-btn" id="btn-view-md">Rendered</button>
+          <button class="filter-btn active" id="btn-view-text">${t('validate_text_view')}</button>
+          <button class="filter-btn" id="btn-view-md">${t('validate_rendered_view')}</button>
         </div>
-        <button class="btn btn-sm btn-ghost" id="btn-viewer-close" style="margin-left:8px;">✕</button>
+        <button class="btn btn-sm btn-ghost" id="btn-viewer-close" style="margin-left:8px;">${t('btn_close')}</button>
       </div>
       <div class="modal-body" id="viewer-body" style="padding:0;">
         <div style="display:flex;align-items:center;justify-content:center;padding:40px;"><span class="spinner"></span></div>
@@ -477,22 +477,11 @@ function showMdView(container, content, filePath) {
 
 function refRemediation(issue, filePath) {
   const filename = filePath.split("/").pop();
-  if (issue.startsWith("Orphan")) {
-    return `Add [link](references/${filename}) in the parent SKILL.md`;
-  }
-  if (issue.startsWith("Very short")) {
-    return "Expand content to at least 100 words";
-  }
-  if (issue.startsWith("No markdown headings")) {
-    return "Add at least one # Heading to structure the document";
-  }
-  if (issue.startsWith("Broken link:")) {
-    const path = issue.replace("Broken link:", "").trim();
-    return `Fix or remove the link to: ${path}`;
-  }
-  if (issue.startsWith("Empty file")) {
-    return "Add content to this reference file or delete it";
-  }
+  if (issue.startsWith("Orphan")) return t('ref_rem_orphan', { file: filename });
+  if (issue.startsWith("Very short")) return t('ref_rem_short');
+  if (issue.startsWith("No markdown headings")) return t('ref_rem_no_heading');
+  if (issue.startsWith("Broken link:")) return t('ref_rem_broken', { path: issue.replace("Broken link:", "").trim() });
+  if (issue.startsWith("Empty file")) return t('ref_rem_empty');
   return null;
 }
 

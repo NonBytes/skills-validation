@@ -1,4 +1,6 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  await restoreLang();
+
   initValidatePage();
   initMatcherPage();
   initCoveragePage();
@@ -17,6 +19,9 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btn-pick-file").addEventListener("click", pickSingleFile);
   document.getElementById("btn-theme").addEventListener("click", toggleTheme);
   document.getElementById("btn-check-update").addEventListener("click", checkForUpdate);
+  document.getElementById("btn-lang-en").addEventListener("click", () => switchLang("en"));
+  document.getElementById("btn-lang-th").addEventListener("click", () => switchLang("th"));
+  updateLangButtons();
 
   restoreTheme();
   // Don't restore last directory — always start fresh
@@ -45,6 +50,30 @@ function switchToPage(page) {
   if (navItem) navItem.classList.add("active");
   const pageEl = document.getElementById(`page-${page}`);
   if (pageEl) pageEl.classList.add("active");
+}
+
+function updateLangButtons() {
+  const lang = getLang();
+  const en = document.getElementById("btn-lang-en");
+  const th = document.getElementById("btn-lang-th");
+  if (en) en.style.color = lang === "en" ? "var(--color-accent)" : "";
+  if (th) th.style.color = lang === "th" ? "var(--color-accent)" : "";
+}
+
+function switchLang(lang) {
+  setLang(lang);
+  updateLangButtons();
+  // Re-render all pages with new language
+  initValidatePage();
+  initMatcherPage();
+  initCoveragePage();
+  initLlmPage();
+  // Re-load data if already open
+  if (currentDirectory) {
+    document.dispatchEvent(new CustomEvent("directory-loaded", { detail: currentDirectory }));
+  } else if (currentFile) {
+    document.dispatchEvent(new CustomEvent("file-loaded", { detail: currentFile }));
+  }
 }
 
 async function restoreOrAutoDetectDirectory() {

@@ -9,39 +9,39 @@ let matcherInputs = {};
 function initMatcherPage() {
   const page = document.getElementById("page-matcher");
   page.innerHTML = `
-    <h1 class="page-title">Trigger Matching Simulator</h1>
+    <h1 class="page-title">${t('matcher_title')}</h1>
     <div class="card">
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
         <div class="form-group">
-          <label class="form-label">Technologies</label>
+          <label class="form-label">${t('matcher_technologies')}</label>
           <div id="input-technologies"></div>
         </div>
         <div class="form-group">
-          <label class="form-label">Services</label>
+          <label class="form-label">${t('matcher_services')}</label>
           <div id="input-services"></div>
         </div>
         <div class="form-group">
-          <label class="form-label">Ports</label>
+          <label class="form-label">${t('matcher_ports')}</label>
           <div id="input-ports"></div>
         </div>
         <div class="form-group">
-          <label class="form-label">Paths</label>
+          <label class="form-label">${t('matcher_paths')}</label>
           <div id="input-paths"></div>
         </div>
         <div class="form-group">
-          <label class="form-label">Signals</label>
+          <label class="form-label">${t('matcher_signals')}</label>
           <div id="input-signals"></div>
         </div>
         <div class="form-group">
-          <label class="form-label">Phase</label>
+          <label class="form-label">${t('matcher_phase')}</label>
           <select id="input-phase" style="width:100%;">
-            <option value="">— none —</option>
+            <option value="">— ${t('matcher_phase_any')} —</option>
             ${VALID_PHASES.map(p => `<option value="${p}">${p}</option>`).join("")}
           </select>
         </div>
       </div>
       <div style="margin-top:12px;">
-        <button class="btn btn-primary" id="btn-match">Run Match</button>
+        <button class="btn btn-primary" id="btn-match">${t('matcher_run')}</button>
       </div>
     </div>
     <div id="match-results"></div>
@@ -59,7 +59,7 @@ function initMatcherPage() {
 async function runMatch() {
   if (!currentDirectory && !currentFile) {
     document.getElementById("match-results").innerHTML =
-      '<div class="warning-box warning-orange">Open a skills directory or file first.</div>';
+      `<div class="warning-box warning-orange">${t('matcher_empty')}</div>`;
     return;
   }
 
@@ -99,7 +99,7 @@ function renderMatchResults(container, data) {
 
   if (data.matches.length > 0) {
     html += `<table class="results-table">
-      <thead><tr><th>Priority</th><th>Skill</th><th>Matched On</th><th>Path</th></tr></thead>
+      <thead><tr><th>${t('matcher_priority')}</th><th>${t('col_name')}</th><th>${t('matcher_fired')}</th><th>${t('col_path')}</th></tr></thead>
       <tbody>`;
 
     data.matches.forEach(m => {

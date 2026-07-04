@@ -1,9 +1,9 @@
 function initCoveragePage() {
   const page = document.getElementById("page-coverage");
   page.innerHTML = `
-    <h1 class="page-title">Coverage Matrix</h1>
+    <h1 class="page-title">${t('coverage_title')}</h1>
     <div id="coverage-content">
-      <p style="color:var(--color-text-muted)">Open a skills directory to compute coverage.</p>
+      <p style="color:var(--color-text-muted)">${t('coverage_empty')}</p>
     </div>
   `;
 
@@ -19,7 +19,7 @@ function initCoveragePage() {
 
 async function runCoverage(dir) {
   const container = document.getElementById("coverage-content");
-  container.innerHTML = '<div style="display:flex;align-items:center;gap:8px;"><span class="spinner"></span> Computing coverage...</div>';
+  container.innerHTML = `<div style="display:flex;align-items:center;gap:8px;"><span class="spinner"></span> ${t('coverage_loading')}</div>`;
 
   try {
     const result = await invoke("get_coverage", { directory: dir });

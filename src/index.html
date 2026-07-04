@@ -14,24 +14,24 @@
       <nav class="sidebar-nav">
         <button class="nav-item active" data-page="validate">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-          Validate
+          <span data-i18n="nav_validate">Validate</span>
         </button>
         <button class="nav-item" data-page="matcher">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-          Matcher
+          <span data-i18n="nav_matcher">Matcher</span>
         </button>
         <button class="nav-item" data-page="coverage">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
-          Coverage
+          <span data-i18n="nav_coverage">Coverage</span>
         </button>
         <button class="nav-item" data-page="llm">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-          LLM Dry-Run
+          <span data-i18n="nav_llm">LLM Dry-Run</span>
         </button>
       </nav>
       <div class="sidebar-footer">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
-          <div class="dir-display" id="current-dir" style="flex:1;margin-bottom:0;">No directory loaded</div>
+          <div class="dir-display" id="current-dir" style="flex:1;margin-bottom:0;" data-i18n-default="no_dir">No directory loaded</div>
           <span id="watch-indicator" style="display:none;width:8px;height:8px;border-radius:50%;background:var(--color-pass);flex-shrink:0;" title="Watching for changes"></span>
           <button class="theme-toggle" id="btn-theme" title="Toggle theme">
             <svg id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -39,12 +39,17 @@
           </button>
         </div>
         <div style="display:flex;gap:6px;">
-          <button class="btn btn-primary" style="flex:1;" id="btn-pick-dir">Open Dir</button>
-          <button class="btn" style="flex:1;" id="btn-pick-file">Open File</button>
+          <button class="btn btn-primary" style="flex:1;" id="btn-pick-dir" data-i18n="btn_open_dir">Open Dir</button>
+          <button class="btn" style="flex:1;" id="btn-pick-file" data-i18n="btn_open_file">Open File</button>
         </div>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;">
           <span style="font-size:10px;color:var(--color-text-muted);" id="app-version">v0.1.0</span>
-          <button class="btn btn-sm btn-ghost" id="btn-check-update" style="font-size:10px;">Check Update</button>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <button class="btn btn-sm btn-ghost" id="btn-lang-en" style="font-size:10px;padding:2px 6px;">EN</button>
+            <span style="font-size:10px;color:var(--color-text-muted);">|</span>
+            <button class="btn btn-sm btn-ghost" id="btn-lang-th" style="font-size:10px;padding:2px 6px;">TH</button>
+            <button class="btn btn-sm btn-ghost" id="btn-check-update" style="font-size:10px;" data-i18n="btn_check_update">Check Update</button>
+          </div>
         </div>
       </div>
     </aside>
@@ -59,6 +64,7 @@
   </div>
 
   <script src="js/vendor/marked.min.js"></script>
+  <script src="js/i18n.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/validate.js"></script>
   <script src="js/matcher.js"></script>
