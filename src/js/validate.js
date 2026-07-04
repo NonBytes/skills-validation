@@ -154,7 +154,7 @@ function renderValidation(container, data) {
         </summary>
         <table class="results-table" style="margin-top:8px;">
           <thead><tr><th>Name</th><th>Status</th><th>Path</th><th>Issues</th><th>Remediation</th></tr></thead>
-          <tbody>
+          <tbody id="ref-tbody">
             ${ref_results.map(r => {
               const shortPath = r.path.split("/").slice(-4).join("/");
               const issuesHtml = r.issues.map(i =>
@@ -163,7 +163,7 @@ function renderValidation(container, data) {
               const remHtml = r.issues.map(i => refRemediation(i, r.path)).filter(Boolean).map(s =>
                 `<div class="issue-suggestion">${escapeHtml(s)}</div>`
               ).join("") || '<span style="color:var(--color-text-muted)">—</span>';
-              return `<tr>
+              return `<tr data-status="${r.status}" data-path="${escapeHtml(r.path)}">
                 <td><a href="#" class="skill-link ref-link" data-path="${escapeHtml(r.path)}">${escapeHtml(r.name)}</a></td>
                 <td><span class="status-badge status-${r.status}">${r.status}</span></td>
                 <td style="font-size:11px;color:var(--color-text-muted);font-family:monospace;">${escapeHtml(shortPath)}</td>
@@ -183,7 +183,7 @@ function renderValidation(container, data) {
 
   function applyFilters() {
     const q = searchQuery.toLowerCase();
-    container.querySelectorAll("#validate-tbody tr").forEach(row => {
+    container.querySelectorAll("#validate-tbody tr, #ref-tbody tr").forEach(row => {
       const matchStatus = activeFilter === "all" || row.dataset.status === activeFilter;
       const name = row.querySelector(".skill-link")?.textContent || row.querySelector("td")?.textContent || "";
       const matchSearch = !q || row.dataset.path.toLowerCase().includes(q) || name.toLowerCase().includes(q);
