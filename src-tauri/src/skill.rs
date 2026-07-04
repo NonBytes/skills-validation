@@ -129,16 +129,13 @@ pub fn validate_skill(skill: &Skill) -> ValidationResult {
         || !skill.frontmatter.phases.is_empty();
 
     if !has_triggers {
-        let level = if skill.excluded { "warn" } else { "error" };
-        let suggestion = if skill.excluded {
-            "Excluded skills don't need triggers, but adding phases can improve coverage reports."
-        } else {
-            "Add at least one of: technologies, services, ports, paths, signals, or phases so the skill can be matched to scenarios."
-        };
         issues.push(ValidationIssue {
-            level: level.into(),
+            level: "warn".into(),
             message: "No trigger categories populated".into(),
-            suggestion: Some(suggestion.into()),
+            suggestion: Some(
+                "Add at least one of: technologies, services, ports, paths, signals, or phases so the skill can be matched to scenarios."
+                    .into(),
+            ),
         });
     }
 

@@ -30,10 +30,16 @@ pub fn load_skills_from_directory(dir: &str) -> LoadResult {
 
         let path_str = path.to_string_lossy().to_string();
         match fs::read_to_string(path) {
-            Ok(content) => match parse_skill(&content, &path_str) {
-                Ok(skill) => skills.push(skill),
-                Err(e) => errors.push((path_str, e)),
-            },
+            Ok(content) => {
+                // Skip files that have no YAML frontmatter — they're docs, not skills
+                if !content.starts_with("---") {
+                    continue;
+                }
+                match parse_skill(&content, &path_str) {
+                    Ok(skill) => skills.push(skill),
+                    Err(e) => errors.push((path_str, e)),
+                }
+            }
             Err(e) => errors.push((path_str, format!("Read error: {e}"))),
         }
     }
