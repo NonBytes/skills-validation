@@ -71,7 +71,15 @@ fn broken_links(ref_path: &str, content: &str) -> Vec<String> {
             if href.starts_with("http") || href.starts_with("mailto") {
                 return None;
             }
-            // Only check hrefs that look like actual file paths
+            // Skip anything that contains regex metacharacters — not a real path
+            let has_regex_chars = href.contains('[') || href.contains('{')
+                || href.contains('|') || href.contains('\\')
+                || href.contains('^') || href.contains('*')
+                || href.contains('+') || href.contains('?');
+            if has_regex_chars {
+                return None;
+            }
+            // Only check hrefs that look like file paths
             let looks_like_path = href.contains('/') || href.ends_with(".md")
                 || href.ends_with(".txt") || href.ends_with(".sh")
                 || href.ends_with(".yaml") || href.ends_with(".json");
