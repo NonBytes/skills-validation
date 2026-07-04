@@ -26,6 +26,7 @@ Thumbs.db
 
 # Agent docs (local only)
 AI_AGENT_INITIAL_DOCS.md
+design-qa.md
 HANDOFF.md
 CONTEXT.md
 CURRENT_STATE.md
