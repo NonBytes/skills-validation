@@ -41,14 +41,12 @@ fn skill_matches_scenario(skill: &Skill, scenario_lower: &str) -> bool {
         }
     }
 
-    let check = |list: &Vec<String>| -> bool {
-        list.iter().any(|kw| {
-            let k = kw.to_lowercase();
-            word_in_text(scenario_lower, &k) || word_in_text(scenario_lower, &k.replace('-', " "))
-        })
-    };
-
-    check(&fm.technologies) || check(&fm.services) || check(&fm.paths) || check(&fm.signals)
+    // Only check technologies — services (http/https) and signals/paths are too generic
+    // for free-text matching and cause false positives on nearly every scenario with a URL.
+    fm.technologies.iter().any(|kw| {
+        let k = kw.to_lowercase();
+        word_in_text(scenario_lower, &k) || word_in_text(scenario_lower, &k.replace('-', " "))
+    })
 }
 
 fn auto_match(skills: &[Skill], scenario: &str) -> Vec<usize> {
