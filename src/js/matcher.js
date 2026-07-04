@@ -10,6 +10,7 @@ function initMatcherPage() {
   const page = document.getElementById("page-matcher");
   page.innerHTML = `
     <h1 class="page-title">${t('matcher_title')}</h1>
+    <p class="page-subtitle">${t('matcher_subtitle')}</p>
     <div class="card">
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
         <div class="form-group">

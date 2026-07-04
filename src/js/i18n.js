@@ -35,6 +35,10 @@ const TRANSLATIONS = {
     search_placeholder: "Search name or path…",
     // Validate page
     validate_title: "Frontmatter Lint & Validate",
+    validate_subtitle: "Parse and lint skill frontmatter to catch schema errors, missing fields, and invalid phases before deployment.",
+    matcher_subtitle: "Simulate trigger matching to see exactly which skills fire — and why — for any target scenario.",
+    coverage_subtitle: "Visual map of gaps across kill-chain phases, agent tools, OWASP Top 10, MITRE ATT&CK, and CWE Top 25.",
+    llm_subtitle: "Send a scenario to a local or cloud LLM with auto-matched skill context, then rate the quality of its response.",
     validate_empty: "Open a skills directory to begin validation.",
     validate_loading: "Validating skills...",
     validate_single_loading: "Validating skill file...",
@@ -132,6 +136,10 @@ const TRANSLATIONS = {
     search_placeholder: "ค้นหาชื่อหรือพาธ…",
     // Validate page
     validate_title: "ตรวจสอบ Frontmatter",
+    validate_subtitle: "Parse และ lint frontmatter ของ skill เพื่อตรวจหา schema errors, field ที่หายไป และ phase ที่ไม่ถูกต้องก่อน deploy",
+    matcher_subtitle: "จำลองการ match trigger เพื่อดูว่า skill ใดถูกเรียกใช้ และเพราะอะไร สำหรับ scenario เป้าหมายใดๆ",
+    coverage_subtitle: "แผนผังช่องว่างของ kill-chain phase, agent tool, OWASP Top 10, MITRE ATT&CK และ CWE Top 25",
+    llm_subtitle: "ส่ง scenario ไปยัง LLM พร้อม skill context ที่ match อัตโนมัติ แล้วประเมินคุณภาพของคำตอบที่ได้รับ",
     validate_empty: "เปิดโฟลเดอร์ skill เพื่อเริ่มตรวจสอบ",
     validate_loading: "กำลังตรวจสอบ...",
     validate_single_loading: "กำลังตรวจสอบไฟล์...",

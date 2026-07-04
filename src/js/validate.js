@@ -2,6 +2,7 @@ function initValidatePage() {
   const page = document.getElementById("page-validate");
   page.innerHTML = `
     <h1 class="page-title">${t('validate_title')}</h1>
+    <p class="page-subtitle">${t('validate_subtitle')}</p>
     <div id="validate-content">
       <p style="color:var(--color-text-muted)">${t('validate_empty')}</p>
     </div>

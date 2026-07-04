@@ -82,6 +82,7 @@ function initLlmPage() {
   const page = document.getElementById("page-llm");
   page.innerHTML = `
     <h1 class="page-title">${t('llm_title')}</h1>
+    <p class="page-subtitle">${t('llm_subtitle')}</p>
     <div class="card">
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
         <div class="form-group">

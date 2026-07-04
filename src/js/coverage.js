@@ -2,6 +2,7 @@ function initCoveragePage() {
   const page = document.getElementById("page-coverage");
   page.innerHTML = `
     <h1 class="page-title">${t('coverage_title')}</h1>
+    <p class="page-subtitle">${t('coverage_subtitle')}</p>
     <div id="coverage-content">
       <p style="color:var(--color-text-muted)">${t('coverage_empty')}</p>
     </div>
