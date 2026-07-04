@@ -24,8 +24,17 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Handoff (local only)
+# Agent docs (local only)
 HANDOFF.md
+CONTEXT.md
+CURRENT_STATE.md
+TASKS.md
+RUNBOOK.md
+ARCHITECTURE.md
+SIGNALS.md
+VALIDATION.md
+IMPLEMENTATION_PLAN.md
+HISTORY.md
 
 # Skills folder (local only)
 skills/
