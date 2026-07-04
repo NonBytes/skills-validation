@@ -370,7 +370,7 @@ async function openSkillViewer(filePath) {
   document.getElementById("btn-view-md").addEventListener("click", () => {
     document.getElementById("btn-view-md").classList.add("active");
     document.getElementById("btn-view-text").classList.remove("active");
-    showMdView(body, content);
+    showMdView(body, content, filePath);
   });
 }
 
@@ -378,9 +378,21 @@ function showTextView(container, content) {
   container.innerHTML = `<pre class="viewer-pre">${escapeHtml(content)}</pre>`;
 }
 
-function showMdView(container, content) {
+function showMdView(container, content, filePath) {
   const rendered = typeof marked !== 'undefined' ? marked.parse(content) : escapeHtml(content);
   container.innerHTML = `<div class="viewer-md">${rendered}</div>`;
+
+  if (!filePath) return;
+  const dir = filePath.substring(0, filePath.lastIndexOf("/"));
+  container.querySelectorAll("a[href]").forEach(a => {
+    const href = a.getAttribute("href");
+    if (!href || href.startsWith("http") || href.startsWith("#")) return;
+    a.addEventListener("click", (e) => {
+      e.preventDefault();
+      const target = href.startsWith("/") ? href : `${dir}/${href}`;
+      openSkillViewer(target);
+    });
+  });
 }
 
 function exportReport() {
