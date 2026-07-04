@@ -77,22 +77,28 @@ function renderValidation(container, data) {
       <button class="filter-btn" data-filter="pass">Pass</button>
       <button class="filter-btn" data-filter="fail">Fail</button>
       <button class="filter-btn" data-filter="warn">Warn</button>
+      ${load_errors.length > 0 ? `<button class="filter-btn" data-filter="error">Error (${load_errors.length})</button>` : ''}
       <input id="validate-search" type="search" placeholder="Search name or path…"
         style="margin-left:auto;padding:4px 10px;border-radius:6px;border:1px solid var(--color-border);background:var(--color-surface);color:var(--color-text);font-size:13px;width:220px;">
     </div>
   `;
 
-  if (load_errors.length > 0) {
-    html += `<div class="card"><strong>Load Errors (${load_errors.length})</strong>`;
-    load_errors.forEach(e => {
-      html += `<div class="issue-item issue-error">${escapeHtml(e.path)}: ${escapeHtml(e.error)}</div>`;
-    });
-    html += `</div>`;
-  }
-
   html += `<table class="results-table">
     <thead><tr><th>Name</th><th>Status</th><th>Path</th><th>Issues</th><th>Remediation</th><th></th></tr></thead>
     <tbody id="validate-tbody">`;
+
+  load_errors.forEach(e => {
+    const name = e.path.split("/").pop();
+    const shortPath = e.path.split("/").slice(-3).join("/");
+    html += `<tr data-status="error" data-path="${escapeHtml(e.path)}">
+      <td style="font-weight:500;">${escapeHtml(name)}</td>
+      <td><span class="status-badge status-fail">error</span></td>
+      <td style="font-size:11px;color:var(--color-text-muted);font-family:monospace;">${escapeHtml(shortPath)}</td>
+      <td><div class="issue-item issue-error">${escapeHtml(e.error)}</div></td>
+      <td><div class="issue-suggestion">Quote description values containing ": " — e.g. description: "text: more text"</div></td>
+      <td></td>
+    </tr>`;
+  });
 
   results.forEach(r => {
     const shortPath = r.path.split("/").slice(-3).join("/");
@@ -168,8 +174,8 @@ function renderValidation(container, data) {
     const q = searchQuery.toLowerCase();
     container.querySelectorAll("#validate-tbody tr").forEach(row => {
       const matchStatus = activeFilter === "all" || row.dataset.status === activeFilter;
-      const matchSearch = !q || row.dataset.path.toLowerCase().includes(q) ||
-        row.querySelector(".skill-link")?.textContent.toLowerCase().includes(q);
+      const name = row.querySelector(".skill-link")?.textContent || row.querySelector("td")?.textContent || "";
+      const matchSearch = !q || row.dataset.path.toLowerCase().includes(q) || name.toLowerCase().includes(q);
       row.style.display = matchStatus && matchSearch ? "" : "none";
     });
   }
