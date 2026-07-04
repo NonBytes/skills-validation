@@ -54,7 +54,7 @@ function hasFixableIssues(result) {
 
 function renderValidation(container, data) {
   lastValidationData = data;
-  const { total, pass, fail, warn, results, load_errors } = data;
+  const { total, pass, fail, warn, results, load_errors, ref_results = [] } = data;
   const passPercent = total > 0 ? ((pass / total) * 100).toFixed(0) : 0;
   const fixableCount = results.filter(r => hasFixableIssues(r)).length;
 
@@ -117,6 +117,41 @@ function renderValidation(container, data) {
   });
 
   html += `</tbody></table>`;
+
+  if (ref_results.length > 0) {
+    const refPass = ref_results.filter(r => r.status === "pass").length;
+    const refWarn = ref_results.filter(r => r.status === "warn").length;
+    const refFail = ref_results.filter(r => r.status === "fail").length;
+    html += `
+      <details style="margin-top:16px;">
+        <summary style="cursor:pointer;font-size:13px;font-weight:600;color:var(--color-text-muted);padding:6px 0;user-select:none;">
+          Reference Files (${ref_results.length})
+          <span style="font-weight:400;margin-left:8px;">
+            <span style="color:var(--color-pass);">${refPass} ok</span>
+            ${refWarn > 0 ? `· <span style="color:var(--color-warn);">${refWarn} warn</span>` : ''}
+            ${refFail > 0 ? `· <span style="color:var(--color-fail);">${refFail} fail</span>` : ''}
+          </span>
+        </summary>
+        <table class="results-table" style="margin-top:8px;">
+          <thead><tr><th>Name</th><th>Status</th><th>Path</th><th>Issues</th></tr></thead>
+          <tbody>
+            ${ref_results.map(r => {
+              const shortPath = r.path.split("/").slice(-4).join("/");
+              const issuesHtml = r.issues.map(i =>
+                `<div class="issue-item issue-warn">${escapeHtml(i)}</div>`
+              ).join("") || '<span style="color:var(--color-pass)">—</span>';
+              return `<tr>
+                <td><a href="#" class="skill-link ref-link" data-path="${escapeHtml(r.path)}">${escapeHtml(r.name)}</a></td>
+                <td><span class="status-badge status-${r.status}">${r.status}</span></td>
+                <td style="font-size:11px;color:var(--color-text-muted);font-family:monospace;">${escapeHtml(shortPath)}</td>
+                <td>${issuesHtml}</td>
+              </tr>`;
+            }).join("")}
+          </tbody>
+        </table>
+      </details>`;
+  }
+
   container.innerHTML = html;
 
   let activeFilter = "all";
@@ -164,7 +199,7 @@ function renderValidation(container, data) {
 
   document.getElementById("btn-export").addEventListener("click", exportReport);
 
-  container.querySelectorAll(".skill-link").forEach(link => {
+  container.querySelectorAll(".skill-link, .ref-link").forEach(link => {
     link.addEventListener("click", (e) => {
       e.preventDefault();
       openSkillViewer(link.dataset.path);

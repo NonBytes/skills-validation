@@ -6,11 +6,13 @@ use crate::skill::{parse_skill, Skill};
 pub struct LoadResult {
     pub skills: Vec<Skill>,
     pub errors: Vec<(String, String)>,
+    pub ref_files: Vec<(String, String)>, // (path, content)
 }
 
 pub fn load_skills_from_directory(dir: &str) -> LoadResult {
     let mut skills = Vec::new();
     let mut errors = Vec::new();
+    let mut ref_files = Vec::new();
 
     for entry in WalkDir::new(dir)
         .follow_links(true)
@@ -31,8 +33,8 @@ pub fn load_skills_from_directory(dir: &str) -> LoadResult {
         let path_str = path.to_string_lossy().to_string();
         match fs::read_to_string(path) {
             Ok(content) => {
-                // Skip files that have no YAML frontmatter — they're docs, not skills
                 if !content.starts_with("---") {
+                    ref_files.push((path_str, content));
                     continue;
                 }
                 match parse_skill(&content, &path_str) {
@@ -52,7 +54,7 @@ pub fn load_skills_from_directory(dir: &str) -> LoadResult {
             .cmp(b.frontmatter.name.as_deref().unwrap_or(""))
     });
 
-    LoadResult { skills, errors }
+    LoadResult { skills, errors, ref_files }
 }
 
 pub fn load_single_skill(file_path: &str) -> LoadResult {
@@ -67,5 +69,5 @@ pub fn load_single_skill(file_path: &str) -> LoadResult {
         Err(e) => errors.push((file_path.to_string(), format!("Read error: {e}"))),
     }
 
-    LoadResult { skills, errors }
+    LoadResult { skills, errors, ref_files: Vec::new() }
 }

@@ -11,12 +11,47 @@ pub struct ValidateResponse {
     pub warn: usize,
     pub results: Vec<ValidationResult>,
     pub load_errors: Vec<LoadError>,
+    pub ref_results: Vec<RefFileResult>,
 }
 
 #[derive(Debug, Serialize)]
 pub struct LoadError {
     pub path: String,
     pub error: String,
+}
+
+#[derive(Debug, Serialize)]
+pub struct RefFileResult {
+    pub path: String,
+    pub name: String,
+    pub status: String,
+    pub issues: Vec<String>,
+}
+
+fn validate_ref_file(path: &str, content: &str) -> RefFileResult {
+    let name = std::path::Path::new(path)
+        .file_stem()
+        .and_then(|s| s.to_str())
+        .unwrap_or(path)
+        .to_string();
+
+    let mut issues = Vec::new();
+
+    if content.trim().is_empty() {
+        issues.push("Empty file".into());
+    } else if !content.lines().any(|l| l.starts_with('#')) {
+        issues.push("No markdown headings found".into());
+    }
+
+    let status = if issues.iter().any(|i: &String| i == "Empty file") {
+        "fail"
+    } else if !issues.is_empty() {
+        "warn"
+    } else {
+        "pass"
+    };
+
+    RefFileResult { path: path.to_string(), name, status: status.into(), issues }
 }
 
 #[tauri::command]
@@ -39,6 +74,12 @@ pub fn validate_skills(directory: String) -> Result<ValidateResponse, String> {
         .map(|(path, error)| LoadError { path, error })
         .collect();
 
+    let ref_results: Vec<RefFileResult> = load_result
+        .ref_files
+        .iter()
+        .map(|(path, content)| validate_ref_file(path, content))
+        .collect();
+
     Ok(ValidateResponse {
         total: results.len() + load_errors.len(),
         pass,
@@ -46,6 +87,7 @@ pub fn validate_skills(directory: String) -> Result<ValidateResponse, String> {
         warn,
         results,
         load_errors,
+        ref_results,
     })
 }
 
@@ -76,5 +118,6 @@ pub fn validate_single_file(file_path: String) -> Result<ValidateResponse, Strin
         warn,
         results,
         load_errors,
+        ref_results: Vec::new(),
     })
 }
