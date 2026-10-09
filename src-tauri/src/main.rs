@@ -3,6 +3,11 @@
 use skills_validation_lib::commands;
 
 #[tauri::command]
+fn get_app_version() -> String {
+    env!("CARGO_PKG_VERSION").to_string()
+}
+
+#[tauri::command]
 fn get_default_skills_dir() -> Option<String> {
     let manifest = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     let project_root = manifest.parent()?;
@@ -49,6 +54,7 @@ fn main() {
             commands::settings::save_setting,
             commands::settings::load_setting,
             get_default_skills_dir,
+            get_app_version,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

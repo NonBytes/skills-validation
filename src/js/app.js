@@ -1,5 +1,9 @@
 document.addEventListener("DOMContentLoaded", async () => {
   await restoreLang();
+  invoke("get_app_version").then(v => {
+    const el = document.getElementById("app-version");
+    if (el) el.textContent = `v${v}`;
+  }).catch(() => {});
 
   initValidatePage();
   initMatcherPage();

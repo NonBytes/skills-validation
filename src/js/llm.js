@@ -115,6 +115,7 @@ function initLlmPage() {
             <option value="th">${t('llm_lang_th')}</option>
           </select>
         </div>
+        <div id="llm-provider-hint" class="warning-box warning-yellow" style="grid-column:span 3;display:none;"></div>
         <div class="form-group" style="grid-column:span 3;">
           <label class="form-label">API Key</label>
           <input id="llm-apikey" type="password" placeholder="Not needed for local providers" style="width:100%;box-sizing:border-box;" />
@@ -150,6 +151,7 @@ function initLlmPage() {
   document.getElementById("llm-provider").addEventListener("change", () => {
     const provider = document.getElementById("llm-provider").value;
     saveSetting("llm_provider", provider);
+    updateProviderHint(provider);
     loadModels();
   });
   document.getElementById("llm-model").addEventListener("change", () => {
@@ -166,6 +168,24 @@ function initLlmPage() {
   restoreLlmSettings();
 }
 
+// Local providers that need something running/installed outside the app
+// before they'll work -- shown as a dismissible-free inline note under the
+// provider/model row whenever that provider is selected.
+const PROVIDER_HINTS = {
+  opencode: "llm_opencode_hint",
+};
+
+function updateProviderHint(provider) {
+  const box = document.getElementById("llm-provider-hint");
+  const key = PROVIDER_HINTS[provider];
+  if (key) {
+    box.innerHTML = t(key);
+    box.style.display = "";
+  } else {
+    box.style.display = "none";
+  }
+}
+
 async function restoreLlmSettings() {
   const provider = await loadSetting("llm_provider");
   const model = await loadSetting("llm_model");
@@ -174,6 +194,7 @@ async function restoreLlmSettings() {
   if (provider) document.getElementById("llm-provider").value = provider;
   if (apikey) document.getElementById("llm-apikey").value = apikey;
   if (lang) document.getElementById("llm-lang").value = lang;
+  updateProviderHint(document.getElementById("llm-provider").value);
   await loadModels(model);
 }
 

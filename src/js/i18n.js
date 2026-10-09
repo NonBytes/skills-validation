@@ -101,6 +101,7 @@ const TRANSLATIONS = {
     llm_empty_skills: "Load a directory first.",
     llm_load_models: "Loading models...",
     llm_example_load: "Load example scenario…",
+    llm_opencode_hint: "Requires OpenCode installed locally — run <code>opencode serve --port 4096</code> before using this provider.",
   },
   th: {
     // Sidebar nav
@@ -204,6 +205,7 @@ const TRANSLATIONS = {
     llm_empty_skills: "โหลดโฟลเดอร์ก่อน",
     llm_load_models: "กำลังโหลดโมเดล...",
     llm_example_load: "โหลด scenario ตัวอย่าง…",
+    llm_opencode_hint: "ต้องติดตั้ง OpenCode บนเครื่องก่อน และรัน <code>opencode serve --port 4096</code> ก่อนใช้งาน provider นี้",
   },
 };
 
