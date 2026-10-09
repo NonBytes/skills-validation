@@ -25,6 +25,7 @@ Thumbs.db
 .idea/
 
 # Agent docs (local only)
+AGENTS.md
 AI_AGENT_INITIAL_DOCS.md
 design-qa.md
 HANDOFF.md
