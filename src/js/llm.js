@@ -212,8 +212,9 @@ async function loadModels(selectModel) {
     `;
   } else if (provider === "anthropic") {
     sel.innerHTML = `
-      <option value="claude-sonnet-4-20250514">claude-sonnet-4</option>
-      <option value="claude-haiku-4-5-20251001">claude-haiku-4.5</option>
+      <option value="claude-opus-5-5">claude-opus-5.5</option>
+      <option value="claude-sonnet-5-5">claude-sonnet-5.5</option>
+      <option value="claude-haiku-5-5">claude-haiku-5.5</option>
     `;
   }
 

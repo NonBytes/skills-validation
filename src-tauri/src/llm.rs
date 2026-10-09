@@ -191,7 +191,7 @@ async fn call_anthropic(
     user: &str,
 ) -> Result<LlmResponse, String> {
     let api_key = config.api_key.as_deref().ok_or("Anthropic API key required")?;
-    let model = config.model.as_deref().unwrap_or("claude-sonnet-4-20250514");
+    let model = config.model.as_deref().unwrap_or("claude-sonnet-5-5");
 
     let client = Client::new();
     let resp = client
