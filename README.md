@@ -29,7 +29,7 @@ Skills are markdown files with YAML frontmatter used to feed context and playboo
    - Also covers **MITRE ATT&CK Tactics**, **CWE Top 25**, and **PTES Phases**.
 
 4. **LLM Dry-Run Tester**
-   - Select cloud or local LLM providers: **OpenAI**, **Anthropic**, **Ollama**, **LM Studio**, and **AnythingLLM**.
+   - Select cloud or local LLM providers: **OpenAI**, **Anthropic**, **OpenRouter**, **OpenCode**, **Ollama**, **LM Studio**, and **AnythingLLM**.
    - **Automatic skill matching** — describe a target scenario in plain text and the engine auto-selects the most relevant skill playbooks (up to 5) as LLM context, mirroring how the real agent runtime works.
    - 50 built-in example scenarios covering web, network, cloud, AD, protocols, and OSINT — load any with one click.
    - Displays which skills were matched for each response.
