@@ -1,4 +1,4 @@
-use crate::llm::{send_llm_request, list_ollama_models, list_openai_compat_models, list_anthropic_models, LlmConfig, LlmResponse, ModelInfo};
+use crate::llm::{send_llm_request, list_ollama_models, list_openai_compat_models, list_anthropic_models, list_opencode_models, LlmConfig, LlmResponse, ModelInfo};
 use crate::loader::{load_skills_from_directory, load_single_skill};
 use crate::skill::Skill;
 
@@ -130,6 +130,16 @@ pub async fn get_lmstudio_models() -> Result<Vec<ModelInfo>, String> {
 #[tauri::command]
 pub async fn get_anythingllm_models(api_key: Option<String>) -> Result<Vec<ModelInfo>, String> {
     list_openai_compat_models("http://localhost:3001/api/v1", api_key.as_deref()).await
+}
+
+#[tauri::command]
+pub async fn get_opencode_models() -> Result<Vec<ModelInfo>, String> {
+    list_opencode_models(None).await
+}
+
+#[tauri::command]
+pub async fn get_openrouter_models(api_key: Option<String>) -> Result<Vec<ModelInfo>, String> {
+    list_openai_compat_models("https://openrouter.ai/api/v1", api_key.as_deref()).await
 }
 
 #[tauri::command]

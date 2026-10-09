@@ -91,8 +91,10 @@ function initLlmPage() {
             <option value="ollama">Ollama</option>
             <option value="lmstudio">LM Studio</option>
             <option value="anythingllm">AnythingLLM</option>
+            <option value="opencode">OpenCode</option>
             <option value="openai">OpenAI</option>
             <option value="anthropic">Anthropic</option>
+            <option value="openrouter">OpenRouter</option>
           </select>
         </div>
         <div class="form-group">
@@ -207,10 +209,16 @@ async function loadModels(selectModel) {
     ollama: "get_ollama_models",
     lmstudio: "get_lmstudio_models",
     anythingllm: "get_anythingllm_models",
+    opencode: "get_opencode_models",
     openai: "get_openai_models",
     anthropic: "get_anthropic_models",
+    openrouter: "get_openrouter_models",
   };
   const needsKey = provider === "openai" || provider === "anthropic";
+  // OpenRouter's /models endpoint works unauthenticated (like AnythingLLM's),
+  // only sending a scenario requires a key -- so it's an optional-key fetch,
+  // not a needsKey one.
+  const optionalKeyProviders = provider === "anythingllm" || provider === "openrouter";
 
   if (needsKey && !apiKey) {
     // No key yet -- can't call the provider's /models endpoint, show the
@@ -219,7 +227,7 @@ async function loadModels(selectModel) {
   } else if (fetchCommands[provider]) {
     sel.innerHTML = '<option value="">Loading...</option>';
     try {
-      const args = (provider === "anythingllm" || needsKey)
+      const args = (optionalKeyProviders || needsKey)
         ? { apiKey: apiKey || null }
         : {};
       const models = await invoke(fetchCommands[provider], args);
@@ -237,7 +245,7 @@ async function loadModels(selectModel) {
         // dropdown empty.
         renderFallbackModels(provider);
       } else {
-        const name = { ollama: "Ollama", lmstudio: "LM Studio", anythingllm: "AnythingLLM" }[provider];
+        const name = { ollama: "Ollama", lmstudio: "LM Studio", anythingllm: "AnythingLLM", opencode: "OpenCode", openrouter: "OpenRouter" }[provider];
         sel.innerHTML = `<option value="">${name} not running</option>`;
       }
     }

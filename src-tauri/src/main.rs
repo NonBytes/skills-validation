@@ -36,6 +36,8 @@ fn main() {
             commands::llm::get_ollama_models,
             commands::llm::get_lmstudio_models,
             commands::llm::get_anythingllm_models,
+            commands::llm::get_opencode_models,
+            commands::llm::get_openrouter_models,
             commands::llm::get_openai_models,
             commands::llm::get_anthropic_models,
             commands::fix::preview_fix,
