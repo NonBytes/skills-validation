@@ -155,6 +155,7 @@ function initLlmPage() {
   });
   document.getElementById("llm-apikey").addEventListener("change", () => {
     saveSetting("llm_apikey", document.getElementById("llm-apikey").value);
+    loadModels();
   });
   document.getElementById("llm-lang").addEventListener("change", () => {
     saveSetting("llm_lang", document.getElementById("llm-lang").value);
@@ -174,21 +175,52 @@ async function restoreLlmSettings() {
   await loadModels(model);
 }
 
+// Static fallback lists, used only when we can't reach the provider's models
+// endpoint yet (no API key entered, offline, or the request failed).
+const FALLBACK_MODELS = {
+  openai: [
+    ["gpt-4o-mini", "gpt-4o-mini"],
+    ["gpt-4o", "gpt-4o"],
+    ["gpt-4.1-mini", "gpt-4.1-mini"],
+    ["gpt-4.1", "gpt-4.1"],
+  ],
+  anthropic: [
+    ["claude-opus-5-5", "claude-opus-5.5"],
+    ["claude-sonnet-5-5", "claude-sonnet-5.5"],
+    ["claude-haiku-5-5", "claude-haiku-5.5"],
+  ],
+};
+
+function renderFallbackModels(provider) {
+  const sel = document.getElementById("llm-model");
+  sel.innerHTML = FALLBACK_MODELS[provider]
+    .map(([v, l]) => `<option value="${v}">${escapeHtml(l)}</option>`)
+    .join("");
+}
+
 async function loadModels(selectModel) {
   const provider = document.getElementById("llm-provider").value;
   const sel = document.getElementById("llm-model");
+  const apiKey = document.getElementById("llm-apikey").value;
 
   const fetchCommands = {
     ollama: "get_ollama_models",
     lmstudio: "get_lmstudio_models",
     anythingllm: "get_anythingllm_models",
+    openai: "get_openai_models",
+    anthropic: "get_anthropic_models",
   };
+  const needsKey = provider === "openai" || provider === "anthropic";
 
-  if (fetchCommands[provider]) {
+  if (needsKey && !apiKey) {
+    // No key yet -- can't call the provider's /models endpoint, show the
+    // last-known-good static list until a key is entered.
+    renderFallbackModels(provider);
+  } else if (fetchCommands[provider]) {
     sel.innerHTML = '<option value="">Loading...</option>';
     try {
-      const args = provider === "anythingllm"
-        ? { apiKey: document.getElementById("llm-apikey").value || null }
+      const args = (provider === "anythingllm" || needsKey)
+        ? { apiKey: apiKey || null }
         : {};
       const models = await invoke(fetchCommands[provider], args);
       if (models.length === 0) {
@@ -200,22 +232,15 @@ async function loadModels(selectModel) {
         }).join("");
       }
     } catch (err) {
-      const name = { ollama: "Ollama", lmstudio: "LM Studio", anythingllm: "AnythingLLM" }[provider];
-      sel.innerHTML = `<option value="">${name} not running</option>`;
+      if (needsKey) {
+        // Bad/expired key or offline -- fall back rather than leaving the
+        // dropdown empty.
+        renderFallbackModels(provider);
+      } else {
+        const name = { ollama: "Ollama", lmstudio: "LM Studio", anythingllm: "AnythingLLM" }[provider];
+        sel.innerHTML = `<option value="">${name} not running</option>`;
+      }
     }
-  } else if (provider === "openai") {
-    sel.innerHTML = `
-      <option value="gpt-4o-mini">gpt-4o-mini</option>
-      <option value="gpt-4o">gpt-4o</option>
-      <option value="gpt-4.1-mini">gpt-4.1-mini</option>
-      <option value="gpt-4.1">gpt-4.1</option>
-    `;
-  } else if (provider === "anthropic") {
-    sel.innerHTML = `
-      <option value="claude-opus-5-5">claude-opus-5.5</option>
-      <option value="claude-sonnet-5-5">claude-sonnet-5.5</option>
-      <option value="claude-haiku-5-5">claude-haiku-5.5</option>
-    `;
   }
 
   if (selectModel) {

@@ -56,6 +56,39 @@ pub async fn list_ollama_models(base_url: Option<&str>) -> Result<Vec<ModelInfo>
     Ok(models)
 }
 
+pub async fn list_anthropic_models(api_key: &str) -> Result<Vec<ModelInfo>, String> {
+    if api_key.is_empty() {
+        return Err("Anthropic API key required".to_string());
+    }
+    let client = Client::new();
+    let resp = client
+        .get("https://api.anthropic.com/v1/models")
+        .header("x-api-key", api_key)
+        .header("anthropic-version", "2023-06-01")
+        .send()
+        .await
+        .map_err(|e| format!("Request failed: {e}"))?;
+
+    let body: serde_json::Value = resp.json().await.map_err(|e| format!("Parse error: {e}"))?;
+
+    let data = body["data"].as_array().ok_or_else(|| {
+        body["error"]["message"]
+            .as_str()
+            .unwrap_or("Unexpected response from Anthropic")
+            .to_string()
+    })?;
+
+    let models = data
+        .iter()
+        .map(|m| ModelInfo {
+            name: m["id"].as_str().unwrap_or("unknown").to_string(),
+            size: String::new(),
+        })
+        .collect();
+
+    Ok(models)
+}
+
 pub async fn list_openai_compat_models(base_url: &str, api_key: Option<&str>) -> Result<Vec<ModelInfo>, String> {
     let client = Client::new();
     let mut req = client.get(format!("{base_url}/models"));
